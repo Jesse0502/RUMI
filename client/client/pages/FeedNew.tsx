@@ -18,6 +18,54 @@ export default function AIMatch() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isTyping]);
 
+  // Demo responses for offline mode
+  const getDemoResponse = (userMessage: string) => {
+    const lowerMessage = userMessage.toLowerCase();
+
+    if (lowerMessage.includes('designer') || lowerMessage.includes('design')) {
+      return {
+        reply: "I understand you're looking for a designer! Based on your description, I can help you find creative professionals. Let me show you some potential matches.",
+        matches: [
+          {
+            id: 1,
+            name: "Sarah Chen",
+            age: 28,
+            location: "Brooklyn, NY",
+            reason: "Experienced UX/UI designer with a passion for user-centered design and collaboration. Has worked with startups and loves creative projects.",
+            image: "https://images.unsplash.com/photo-1494790108755-2616b612b1e8?w=150&h=150&fit=crop&crop=face"
+          },
+          {
+            id: 2,
+            name: "Alex Rodriguez",
+            age: 32,
+            location: "San Francisco, CA",
+            reason: "Senior graphic designer specializing in brand identity and digital marketing. Known for clean, modern designs and meeting tight deadlines.",
+            image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face"
+          }
+        ]
+      };
+    } else if (lowerMessage.includes('developer') || lowerMessage.includes('engineer')) {
+      return {
+        reply: "Great! You're looking for a developer. I can help you find talented engineers. Here are some matches based on your criteria.",
+        matches: [
+          {
+            id: 3,
+            name: "Maya Patel",
+            age: 26,
+            location: "Austin, TX",
+            reason: "Full-stack developer with React and Node.js expertise. Passionate about AI and building user-friendly applications.",
+            image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face"
+          }
+        ]
+      };
+    } else {
+      return {
+        reply: "I'd love to help you find the right person! Could you tell me more about what kind of professional or collaborator you're looking for? For example, their role, location, or specific skills?",
+        matches: []
+      };
+    }
+  };
+
   // Connect WebSocket with retry logic
   useEffect(() => {
     let reconnectTimeout: NodeJS.Timeout;
