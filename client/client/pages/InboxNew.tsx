@@ -545,6 +545,18 @@ export default function InboxNew() {
                   ? "ring-2 ring-rumi-purple bg-rumi-purple-50"
                   : ""
               }`}
+              onClick={(e) => {
+                // Don't open modal if clicking on checkboxes or action buttons
+                if (
+                  e.target instanceof HTMLInputElement ||
+                  e.target instanceof HTMLButtonElement ||
+                  (e.target as HTMLElement).closest('button') ||
+                  (e.target as HTMLElement).closest('input[type="checkbox"]')
+                ) {
+                  return;
+                }
+                openMessageModal(letter);
+              }}
             >
               <div className="flex items-start gap-4">
                 {/* Selection Checkbox */}
