@@ -125,10 +125,15 @@ export default function AIMatch() {
         };
 
         socket.onclose = (event) => {
+          const closeReason = getCloseReasonText(event.code);
           console.log("❌ WebSocket closed:", {
             code: event.code,
-            reason: event.reason,
-            wasClean: event.wasClean
+            codeDescription: closeReason,
+            reason: event.reason || 'No reason provided',
+            wasClean: event.wasClean,
+            timestamp: new Date().toISOString(),
+            reconnectAttempts: reconnectAttempts,
+            maxAttempts: maxReconnectAttempts
           });
 
           // Attempt to reconnect if not manually closed and under retry limit
