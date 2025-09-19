@@ -20,6 +20,7 @@ import ChatNew from "./pages/ChatNew";
 import NotFound from "./pages/NotFound";
 import Home from "./pages/Home";
 import Settings from "./pages/Settings";
+import TestNotifications from "./pages/TestNotifications";
 
 const queryClient = new QueryClient();
 
