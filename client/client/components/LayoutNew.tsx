@@ -23,6 +23,7 @@ interface LayoutProps {
 export default function LayoutNew({ children }: LayoutProps) {
   const location = useLocation();
   const [notifEnabled, setNotifEnabled] = useState(false);
+  const [notifPermission, setNotifPermission] = useState<NotificationPermission>('default');
 
   // Get background context with fallback
   const backgroundContext = useBackground();
