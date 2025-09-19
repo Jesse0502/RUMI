@@ -17,69 +17,110 @@ export default function AIMatch() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isTyping]);
 
-  // Connect WebSocket once
+  // Connect WebSocket with retry logic
   useEffect(() => {
-    const socket = new WebSocket("ws://localhost:8000/ws");
-    socketRef.current = socket;
+    let reconnectTimeout: NodeJS.Timeout;
+    let reconnectAttempts = 0;
+    const maxReconnectAttempts = 5;
 
-    socket.onopen = () => {
-      console.log("✅ Connected to WebSocket server");
-    };
+    const connectWebSocket = () => {
+      try {
+        const socket = new WebSocket("ws://localhost:8000/ws");
+        socketRef.current = socket;
 
-    socket.onmessage = (event) => {
-      console.log(event.data);
-      const data = JSON.parse(event.data);
-      if (data.matches) {
-        setMatches(data.matches);
-        console.log("Received matches:", data.matches);
+        socket.onopen = () => {
+          console.log("✅ Connected to WebSocket server");
+          reconnectAttempts = 0; // Reset attempts on successful connection
+        };
+
+        socket.onmessage = (event) => {
+          try {
+            console.log("Received data:", event.data);
+            const data = JSON.parse(event.data);
+
+            if (data.matches) {
+              setMatches(data.matches);
+              console.log("Received matches:", data.matches);
+            }
+
+            if (!data.reply) {
+              setIsTyping(false);
+              return;
+            }
+
+            console.log("Received AI reply:", data.reply);
+            // Add AI text reply
+            const aiMessage = {
+              id: Date.now(),
+              text: data.reply,
+              isUser: false,
+              timestamp: new Date(),
+            };
+            setMessages((prev) => [...prev, aiMessage]);
+            setIsTyping(false);
+          } catch (parseError) {
+            console.error("Error parsing WebSocket message:", parseError);
+            setIsTyping(false);
+          }
+        };
+
+        socket.onclose = (event) => {
+          console.log("❌ WebSocket closed:", {
+            code: event.code,
+            reason: event.reason,
+            wasClean: event.wasClean
+          });
+
+          // Attempt to reconnect if not manually closed and under retry limit
+          if (reconnectAttempts < maxReconnectAttempts && event.code !== 1000) {
+            reconnectAttempts++;
+            console.log(`🔄 Attempting to reconnect... (${reconnectAttempts}/${maxReconnectAttempts})`);
+            reconnectTimeout = setTimeout(connectWebSocket, 3000 * reconnectAttempts);
+          } else if (reconnectAttempts >= maxReconnectAttempts) {
+            console.error("❌ Max reconnection attempts reached. Please refresh the page.");
+          }
+        };
+
+        socket.onerror = (event) => {
+          console.error("⚠️ WebSocket error details:", {
+            event: event,
+            readyState: socket.readyState,
+            url: socket.url,
+            timestamp: new Date().toISOString()
+          });
+
+          // Add user-friendly error message
+          const errorMessage = {
+            id: Date.now(),
+            text: "❌ Connection error. Trying to reconnect...",
+            isUser: false,
+            timestamp: new Date(),
+          };
+          setMessages((prev) => [...prev, errorMessage]);
+          setIsTyping(false);
+        };
+
+      } catch (connectionError) {
+        console.error("❌ Failed to create WebSocket connection:", connectionError);
+
+        // Add user-friendly error message
+        const errorMessage = {
+          id: Date.now(),
+          text: "❌ Unable to connect to AI service. Please make sure the server is running on port 8000.",
+          isUser: false,
+          timestamp: new Date(),
+        };
+        setMessages((prev) => [...prev, errorMessage]);
       }
-      if (!data.reply) {
-        setIsTyping(false);
-        return;
-      }
-      console.log("Received AI reply:", data.reply);
-      // Add AI text reply
-      const aiMessage = {
-        id: Date.now(),
-        text: data.reply,
-        isUser: false,
-        timestamp: new Date(),
-      };
-      setMessages((prev) => [...prev, aiMessage]);
-
-      // If matches exist → render them as one combined message
-      // if (data.matches && data.matches.length > 0) {
-      //   const matchText = data.matches
-      //     .map(
-      //       (m: any) =>
-      //         `⭐ ${m.name} (${m.age}, ${m.location})\nWhy: ${m.reason}`,
-      //     )
-      //     .join("\n\n");
-
-      //   setMessages((prev) => [
-      //     ...prev,
-      //     {
-      //       id: Date.now() + 1,
-      //       text: `Here are some potential matches:\n\n${matchText}`,
-      //       isUser: false,
-      //       timestamp: new Date(),
-      //     },
-      //   ]);
-      // }
-
-      setIsTyping(false);
     };
 
-    socket.onclose = () => {
-      console.log("❌ WebSocket closed");
-    };
-
-    socket.onerror = (err) => {
-      console.error("⚠️ WebSocket error:", err);
-    };
+    connectWebSocket();
 
     return () => {
-      socket.close();
+      clearTimeout(reconnectTimeout);
+      if (socketRef.current) {
+        socketRef.current.close(1000, "Component unmounting");
+      }
     };
   }, []);
 
