@@ -10,7 +10,7 @@ import Index from "./pages/Index";
 import OnboardingNew from "./pages/OnboardingNew";
 import Profile from "./pages/Profile";
 import WriteNew from "./pages/WriteNew";
-import FeedNew from "./pages/FeedNew";
+import AIMatch from "./pages/FeedNew";
 import ConnectionsNew from "./pages/ConnectionsNew";
 import PastLettersNew from "./pages/PastLettersNew";
 import InboxNew from "./pages/InboxNew";
@@ -35,7 +35,7 @@ export default function App() {
               <Route path="/onboarding" element={<OnboardingNew />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/write" element={<WriteNew />} />
-              <Route path="/feed" element={<FeedNew />} />
+              <Route path="/feed" element={<AIMatch />} />
               <Route path="/connections" element={<ConnectionsNew />} />
               <Route path="/past-letters" element={<PastLettersNew />} />
               <Route path="/inbox" element={<InboxNew />} />
