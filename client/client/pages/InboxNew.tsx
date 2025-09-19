@@ -22,6 +22,8 @@ import {
 } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { notifyNewMessage, sendPushNotification } from "@/lib/notifications";
+import { toast } from "sonner";
 
 export default function InboxNew() {
   const [searchQuery, setSearchQuery] = useState("");
