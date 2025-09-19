@@ -375,11 +375,26 @@ export default function InboxNew() {
   const sendReply = () => {
     if (!replyContent.trim()) return;
 
-    // Update reply count for the message
+    const newReply = {
+      id: `${selectedMessage.id}-${Date.now()}`,
+      from: "You",
+      avatar: "Y",
+      content: replyContent,
+      timestamp: new Date(),
+      isFromMe: true,
+    };
+
+    // Update reply count and conversation for the message
     setAllLetters(prev =>
       prev.map(l =>
         l.id === selectedMessage.id
-          ? { ...l, replyCount: l.replyCount + 1 }
+          ? {
+              ...l,
+              replyCount: l.replyCount + 1,
+              conversation: [...(l.conversation || []), newReply],
+              timestamp: new Date(), // Update timestamp to show as most recent
+              isRead: true,
+            }
           : l
       )
     );
@@ -387,7 +402,10 @@ export default function InboxNew() {
     // Update selected message
     setSelectedMessage(prev => ({
       ...prev,
-      replyCount: prev.replyCount + 1
+      replyCount: prev.replyCount + 1,
+      conversation: [...(prev.conversation || []), newReply],
+      timestamp: new Date(),
+      isRead: true,
     }));
 
     // Reset reply state
