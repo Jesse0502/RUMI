@@ -27,6 +27,16 @@ export default function InboxNew() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedFilter, setSelectedFilter] = useState("all");
   const [selectedItems, setSelectedItems] = useState<number[]>([]);
+  const [showComposeModal, setShowComposeModal] = useState(false);
+  const [letterForm, setLetterForm] = useState({
+    title: "",
+    content: "",
+    targetAudience: "",
+    skills: "",
+    lookingFor: "",
+  });
+  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const letters = [
     {
