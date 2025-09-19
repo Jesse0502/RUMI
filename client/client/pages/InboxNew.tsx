@@ -365,6 +365,7 @@ export default function InboxNew() {
     setIsMessageModalOpen(false);
     setIsReplying(false);
     setReplyContent("");
+    setReplyAttachments([]);
   };
 
   const toggleReply = () => {
