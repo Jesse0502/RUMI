@@ -291,15 +291,11 @@ export default function AIMatch() {
       // Send to WebSocket backend
       socketRef.current.send(userMessage.text);
     } catch (sendError) {
-      console.error("❌ Error sending message:", {
-        error: sendError instanceof Error ? {
-          name: sendError.name,
-          message: sendError.message,
-          stack: sendError.stack
-        } : sendError,
+      debugError("❌ Error sending message:", {
+        error: getErrorInfo(sendError),
         socketState: socketRef.current ? getReadyStateText(socketRef.current.readyState) : 'No socket',
         messageLength: userMessage.text.length,
-        timestamp: new Date().toISOString()
+        browserInfo: getBrowserInfo()
       });
 
       const errorMessage = {
