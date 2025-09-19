@@ -96,6 +96,20 @@ export default function ConnectionsNew() {
     comm.name.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
+  const approveRequest = (requestId: number) => {
+    // In a real app, this would call an API
+    alert("Connection request approved! You can now chat in the normal chat screen.");
+    // Remove from pending requests
+    // setPendingRequests(prev => prev.filter(req => req.id !== requestId));
+  };
+
+  const declineRequest = (requestId: number) => {
+    // In a real app, this would call an API
+    alert("Connection request declined.");
+    // Remove from pending requests
+    // setPendingRequests(prev => prev.filter(req => req.id !== requestId));
+  };
+
   return (
     <LayoutNew>
       <div className="space-y-6">
