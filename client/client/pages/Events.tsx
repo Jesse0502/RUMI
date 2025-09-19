@@ -102,6 +102,26 @@ export default function Events() {
     );
   }
 
+  function handleImageUpload(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    if (file) {
+      setEventImage(file);
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setImagePreview(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  function removeImage() {
+    setEventImage(null);
+    setImagePreview("");
+    if (imageInputRef.current) {
+      imageInputRef.current.value = "";
+    }
+  }
+
   function createEvent() {
     const id = Math.floor(Math.random() * 1000000);
     const newEvent = {
