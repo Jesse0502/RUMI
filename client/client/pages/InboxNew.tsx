@@ -30,6 +30,8 @@ export default function InboxNew() {
   const [showComposeModal, setShowComposeModal] = useState(false);
   const [selectedMessage, setSelectedMessage] = useState<any>(null);
   const [isMessageModalOpen, setIsMessageModalOpen] = useState(false);
+  const [isReplying, setIsReplying] = useState(false);
+  const [replyContent, setReplyContent] = useState("");
   const [letterForm, setLetterForm] = useState({
     title: "",
     content: "",
