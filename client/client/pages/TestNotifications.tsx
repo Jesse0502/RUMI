@@ -15,7 +15,25 @@ import { toast } from "sonner";
 
 export default function TestNotifications() {
   const [isLoading, setIsLoading] = useState(false);
+  const [isDiagnosticRunning, setIsDiagnosticRunning] = useState(false);
   const notificationSupport = checkNotificationSupport();
+
+  const runDiagnostics = async () => {
+    setIsDiagnosticRunning(true);
+    try {
+      await runWebSocketDiagnostics();
+      toast.success("WebSocket diagnostics completed!", {
+        description: "Check the browser console for detailed results",
+        duration: 4000,
+      });
+    } catch (error) {
+      toast.error("Diagnostics failed", {
+        description: error instanceof Error ? error.message : "Unknown error",
+      });
+    } finally {
+      setIsDiagnosticRunning(false);
+    }
+  };
 
   const testNotifications = [
     {
