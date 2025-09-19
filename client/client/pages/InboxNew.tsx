@@ -197,13 +197,15 @@ export default function InboxNew() {
         const newLetters = generateMoreLetters(prev.length + 1, 10);
         return [...prev, ...newLetters];
       });
-      setPage(prev => prev + 1);
+      setPage(prev => {
+        const newPage = prev + 1;
+        // Stop loading after 5 pages
+        if (newPage >= 5) {
+          setHasMore(false);
+        }
+        return newPage;
+      });
       setIsLoading(false);
-
-      // Stop loading after 5 pages
-      if (page >= 5) {
-        setHasMore(false);
-      }
     }, 1000);
   };
 
