@@ -251,6 +251,12 @@ export default function AIMatch() {
             <p className="text-sm text-gray-500 mt-1">
               Describe the person you're looking for — AI will suggest matches.
             </p>
+            {isOfflineMode && (
+              <div className="mt-2 inline-flex items-center gap-2 bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-xs">
+                <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                Demo Mode - AI service unavailable
+              </div>
+            )}
           </div>
         </header>
 
