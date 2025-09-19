@@ -138,7 +138,9 @@ export default function LayoutNew({ children }: LayoutProps) {
       const existingSubscription = await reg.pushManager.getSubscription();
       if (existingSubscription) {
         setNotifEnabled(true);
-        alert("Push notifications are already enabled!");
+        // Send test notification if already enabled
+        sendTestNotification();
+        alert("Push notifications are already enabled! Sending test notification...");
         return;
       }
 
