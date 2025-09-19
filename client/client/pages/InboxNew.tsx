@@ -945,45 +945,48 @@ export default function InboxNew() {
                   </div>
                 </div>
 
-                {/* Conversation Thread */}
-                <div className="space-y-6">
+                {/* Conversation Thread - Email Style */}
+                <div className="space-y-4">
                   {(selectedMessage.conversation || []).length > 0 ? (
                     (selectedMessage.conversation || []).map((message: any, index: number) => (
-                      <div key={message.id} className={`flex gap-4 ${message.isFromMe ? 'flex-row-reverse' : ''}`}>
-                        {/* Avatar */}
-                        <div className="flex-shrink-0">
-                          <div
-                            className={`w-10 h-10 bg-gradient-to-br ${
-                              message.isFromMe
-                                ? 'from-indigo-400 to-purple-500'
-                                : getAvatarColor(message.from)
-                            } rounded-full flex items-center justify-center text-white font-semibold text-sm`}
-                          >
-                            {message.avatar}
+                      <div key={message.id} className="border border-gray-200 rounded-lg overflow-hidden">
+                        {/* Email Header */}
+                        <div className="bg-gray-50 px-6 py-3 border-b border-gray-200">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                              <div
+                                className={`w-8 h-8 bg-gradient-to-br ${
+                                  message.isFromMe
+                                    ? 'from-indigo-400 to-purple-500'
+                                    : getAvatarColor(message.from)
+                                } rounded-full flex items-center justify-center text-white font-semibold text-xs`}
+                              >
+                                {message.avatar}
+                              </div>
+                              <div>
+                                <div className="flex items-center gap-2">
+                                  <span className="font-medium text-gray-900">{message.from}</span>
+                                  {message.isFromMe && (
+                                    <span className="text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full">You</span>
+                                  )}
+                                </div>
+                                <div className="text-xs text-gray-500">
+                                  {message.timestamp.toLocaleDateString()} at {message.timestamp.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })}
+                                </div>
+                              </div>
+                            </div>
+                            {index === 0 && !message.isFromMe && (
+                              <button className="text-xs bg-indigo-600 text-white px-3 py-1 rounded-full hover:bg-indigo-700 transition-colors">
+                                Send Connection Request
+                              </button>
+                            )}
                           </div>
                         </div>
 
-                        {/* Message */}
-                        <div className={`flex-1 max-w-[80%] ${message.isFromMe ? 'text-right' : ''}`}>
-                          <div className="flex items-center gap-2 mb-2">
-                            <span className={`text-sm font-medium text-gray-900 ${message.isFromMe ? 'order-2' : ''}`}>
-                              {message.from}
-                            </span>
-                            <span className={`text-xs text-gray-500 ${message.isFromMe ? 'order-1' : ''}`}>
-                              {formatTimestamp(message.timestamp)}
-                            </span>
-                          </div>
-
-                          <div
-                            className={`prose prose-sm max-w-none p-4 rounded-xl ${
-                              message.isFromMe
-                                ? 'bg-indigo-600 text-white rounded-br-md'
-                                : 'bg-gray-50 text-gray-800 rounded-bl-md'
-                            }`}
-                          >
-                            <p className={`whitespace-pre-wrap leading-relaxed m-0 ${
-                              message.isFromMe ? 'text-white' : 'text-gray-800'
-                            }`}>
+                        {/* Email Content */}
+                        <div className="p-6">
+                          <div className="prose prose-sm max-w-none">
+                            <p className="text-gray-800 leading-relaxed whitespace-pre-wrap m-0">
                               {message.content}
                             </p>
                           </div>
@@ -991,10 +994,13 @@ export default function InboxNew() {
                       </div>
                     ))
                   ) : (
-                    <div className="text-center py-8">
-                      <div className="bg-gray-50 rounded-xl p-6">
+                    <div className="border border-gray-200 rounded-lg p-6">
+                      <div className="text-center">
                         <p className="text-gray-600 mb-4">This is the beginning of your conversation with {selectedMessage.from}.</p>
-                        <p className="text-gray-500 text-sm">{selectedMessage.preview}</p>
+                        <p className="text-gray-500 text-sm mb-4">{selectedMessage.preview}</p>
+                        <button className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors">
+                          Send Connection Request
+                        </button>
                       </div>
                     </div>
                   )}
