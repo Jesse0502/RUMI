@@ -266,8 +266,8 @@ export default function InboxNew() {
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-heading-2 text-gray-900 mb-2">Inbox</h1>
-            <p className="text-body text-gray-600">
+            <h1 className="text-3xl font-extrabold text-gray-900">Inbox</h1>
+            <p className="text-sm text-gray-500 mt-1">
               Letters and messages from your connections
             </p>
           </div>
@@ -278,6 +278,14 @@ export default function InboxNew() {
               {filteredLetters.length}{" "}
               {filteredLetters.length === 1 ? "message" : "messages"}
             </div>
+
+            <button
+              onClick={() => setShowComposeModal(true)}
+              className="inline-flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-full text-sm font-medium shadow hover:bg-indigo-700 transition"
+            >
+              <Edit3 className="w-4 h-4" />
+              Compose Letter
+            </button>
           </div>
         </div>
 
