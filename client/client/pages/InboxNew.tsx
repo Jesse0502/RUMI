@@ -32,6 +32,8 @@ export default function InboxNew() {
   const [isMessageModalOpen, setIsMessageModalOpen] = useState(false);
   const [isReplying, setIsReplying] = useState(false);
   const [replyContent, setReplyContent] = useState("");
+  const [replyAttachments, setReplyAttachments] = useState<File[]>([]);
+  const replyFileInputRef = useRef<HTMLInputElement>(null);
   const [letterForm, setLetterForm] = useState({
     title: "",
     content: "",
