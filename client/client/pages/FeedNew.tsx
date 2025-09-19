@@ -11,6 +11,7 @@ export default function AIMatch() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const socketRef = useRef<WebSocket | null>(null);
   const [matches, setMatches] = useState<any[]>([]);
+  const [isOfflineMode, setIsOfflineMode] = useState(false);
 
   // Auto-scroll to bottom
   useEffect(() => {
