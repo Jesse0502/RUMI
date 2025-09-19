@@ -1023,40 +1023,102 @@ export default function InboxNew() {
                   </div>
                 )}
 
-                {/* Inline Reply Compose */}
+                {/* Inline Reply Compose - Email Style */}
                 {isReplying && (
                   <div className="border-t border-gray-200 pt-6">
-                    <div className="bg-gray-50 rounded-xl p-6 space-y-4">
-                      <div className="flex items-center gap-2 text-sm text-gray-600">
-                        <Reply className="w-4 h-4" />
-                        <span>Replying to {selectedMessage.from}</span>
+                    <div className="border border-gray-200 rounded-lg overflow-hidden">
+                      {/* Reply Header */}
+                      <div className="bg-gray-50 px-6 py-3 border-b border-gray-200">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2 text-sm text-gray-700">
+                            <Reply className="w-4 h-4" />
+                            <span className="font-medium">Reply to {selectedMessage.from}</span>
+                          </div>
+                          <button
+                            onClick={toggleReply}
+                            className="text-gray-400 hover:text-gray-600"
+                          >
+                            <X className="w-4 h-4" />
+                          </button>
+                        </div>
                       </div>
 
-                      <div>
+                      {/* Reply Content */}
+                      <div className="p-6 space-y-4">
                         <textarea
                           value={replyContent}
                           onChange={(e) => setReplyContent(e.target.value)}
                           placeholder="Write your reply..."
-                          rows={6}
-                          className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-300 resize-none bg-white"
+                          rows={8}
+                          className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 resize-none"
                         />
-                      </div>
 
-                      <div className="flex gap-3">
-                        <button
-                          onClick={sendReply}
-                          disabled={!replyContent.trim()}
-                          className="flex items-center gap-2 px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                        >
-                          <Send className="w-4 h-4" />
-                          Send Reply
-                        </button>
-                        <button
-                          onClick={toggleReply}
-                          className="px-6 py-2 border border-gray-200 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
-                        >
-                          Cancel
-                        </button>
+                        {/* Attachment Upload */}
+                        <div>
+                          <input
+                            ref={replyFileInputRef}
+                            type="file"
+                            multiple
+                            accept="image/*,.pdf,.doc,.docx,.txt"
+                            onChange={(e) => {
+                              const files = Array.from(e.target.files || []);
+                              setReplyAttachments(prev => [...prev, ...files]);
+                            }}
+                            className="hidden"
+                          />
+
+                          {replyAttachments.length > 0 && (
+                            <div className="space-y-2 mb-4">
+                              <label className="text-sm font-medium text-gray-700">Attachments:</label>
+                              {replyAttachments.map((file, index) => (
+                                <div key={index} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                                  {getFileIcon(file)}
+                                  <div className="flex-1 min-w-0">
+                                    <div className="text-sm font-medium text-gray-900 truncate">
+                                      {file.name}
+                                    </div>
+                                    <div className="text-xs text-gray-500">
+                                      {(file.size / 1024 / 1024).toFixed(2)} MB
+                                    </div>
+                                  </div>
+                                  <button
+                                    onClick={() => setReplyAttachments(prev => prev.filter((_, i) => i !== index))}
+                                    className="p-1 hover:bg-gray-200 rounded"
+                                  >
+                                    <X className="w-4 h-4 text-gray-500" />
+                                  </button>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+
+                          <div className="flex items-center gap-3">
+                            <button
+                              onClick={() => replyFileInputRef.current?.click()}
+                              className="flex items-center gap-2 px-4 py-2 border border-gray-200 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                            >
+                              <Paperclip className="w-4 h-4" />
+                              Attach Files
+                            </button>
+
+                            <div className="flex-1"></div>
+
+                            <button
+                              onClick={toggleReply}
+                              className="px-6 py-2 border border-gray-200 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                            >
+                              Cancel
+                            </button>
+                            <button
+                              onClick={sendReply}
+                              disabled={!replyContent.trim()}
+                              className="flex items-center gap-2 px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                            >
+                              <Send className="w-4 h-4" />
+                              Send Reply
+                            </button>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
