@@ -90,14 +90,25 @@ export default function AIMatch() {
             timestamp: new Date().toISOString()
           });
 
-          // Add user-friendly error message
-          const errorMessage = {
-            id: Date.now(),
-            text: "❌ Connection error. Trying to reconnect...",
-            isUser: false,
-            timestamp: new Date(),
-          };
-          setMessages((prev) => [...prev, errorMessage]);
+          // Switch to offline mode after connection attempts
+          if (reconnectAttempts >= 2) {
+            setIsOfflineMode(true);
+            const offlineMessage = {
+              id: Date.now(),
+              text: "🔄 AI service unavailable. Running in demo mode with sample responses.",
+              isUser: false,
+              timestamp: new Date(),
+            };
+            setMessages((prev) => [...prev, offlineMessage]);
+          } else {
+            const errorMessage = {
+              id: Date.now(),
+              text: "❌ Connection error. Trying to reconnect...",
+              isUser: false,
+              timestamp: new Date(),
+            };
+            setMessages((prev) => [...prev, errorMessage]);
+          }
           setIsTyping(false);
         };
 
