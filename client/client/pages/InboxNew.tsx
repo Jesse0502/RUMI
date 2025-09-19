@@ -28,6 +28,8 @@ export default function InboxNew() {
   const [selectedFilter, setSelectedFilter] = useState("all");
   const [selectedItems, setSelectedItems] = useState<number[]>([]);
   const [showComposeModal, setShowComposeModal] = useState(false);
+  const [selectedMessage, setSelectedMessage] = useState<any>(null);
+  const [isMessageModalOpen, setIsMessageModalOpen] = useState(false);
   const [letterForm, setLetterForm] = useState({
     title: "",
     content: "",
