@@ -37,8 +37,14 @@ export default function InboxNew() {
   });
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [page, setPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const [allLetters, setAllLetters] = useState<any[]>([]);
+  const bottomRef = useRef<HTMLDivElement>(null);
 
-  const letters = [
+  // Generate initial letters
+  const initialLetters = [
     {
       id: 1,
       from: "Sarah Chen",
