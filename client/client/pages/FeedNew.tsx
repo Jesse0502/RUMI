@@ -104,103 +104,86 @@ export default function AIMatch() {
 
   return (
     <LayoutNew>
-      <div className="min-h-screen bg-neutral-50">
-        <div className="max-w-5xl mx-auto py-8 px-4 lg:px-0">
-          {/* Header */}
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-            <div>
-              <h1 className="text-3xl font-extrabold text-gray-900 flex items-center gap-2">
-                <Sparkles className="w-8 h-8 text-indigo-600" />
-                AI Match
-              </h1>
-              <p className="text-sm text-gray-500 mt-1">
-                Describe the person you're looking for — AI will suggest perfect matches
-              </p>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <span className="text-xs bg-green-100 text-green-700 px-3 py-1 rounded-full font-medium">
-                ✨ AI-Powered
-              </span>
-            </div>
+      <div className="relative w-full min-h-full bg-gray-50 flex flex-col items-center">
+        {/* Header */}
+        <header className="w-full border-b border-gray-200">
+          <div className="max-w-2xl mx-auto py-6 text-center">
+            <h1 className="text-2xl font-semibold text-gray-900">
+              RUMI AI Match
+            </h1>
+            <p className="text-sm text-gray-500 mt-1">
+              Describe the person you're looking for — AI will suggest matches.
+            </p>
           </div>
+        </header>
 
-          {/* Messages */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6 min-h-[500px] relative">
-            <div className="space-y-4">
-              {messages.length === 0 && !isTyping ? (
-                <div className="text-center text-gray-500 py-12">
-                  <div className="mb-4 text-4xl">🤖</div>
-                  <h3 className="text-lg font-semibold text-gray-700 mb-2">Ready to find your perfect match?</h3>
-                  <p className="text-sm">
-                    Describe the person you're looking for. Try:{" "}
-                    <em className="text-indigo-600">
-                      "creative photographer in San Francisco who loves coffee"
-                    </em>
-                  </p>
-                </div>
-              ) : (
-                messages.map((msg) => (
-                  <div
-                    key={msg.id}
-                    className={`flex ${msg.isUser ? "justify-end" : "justify-start"}`}
-                  >
-                    <div
-                      className={`whitespace-pre-line px-4 py-3 rounded-xl max-w-[75%] text-sm leading-relaxed ${
-                        msg.isUser
-                          ? "bg-indigo-600 text-white"
-                          : "bg-gray-50 border border-gray-200 text-gray-800"
-                      }`}
-                    >
-                      {msg.text}
-                    </div>
-                  </div>
-                ))
-              )}
-
-              <div className="space-y-4">
-                {matches.map((match) => (
-                  <div
-                    key={match.id}
-                    className="p-4 bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-shadow"
-                  >
-                    <div className="flex items-start gap-4">
-                      <img
-                        src={
-                          match.image ??
-                          "https://images.unsplash.com/photo-1559116315-702b0b4774ce?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8ZHVtbXl8ZW58MHx8MHx8fDA%3D"
-                        }
-                        alt={`${match.name} avatar`}
-                        className="w-16 h-16 rounded-full object-cover flex-shrink-0 border-2 border-indigo-100"
-                      />
-                      <div className="flex-1">
-                        <div className="flex items-center justify-between mb-2">
-                          <h4 className="font-semibold text-gray-900 text-lg">
-                            {match.name}
-                          </h4>
-                          <span className="text-sm text-gray-500 bg-gray-100 px-2 py-1 rounded-full">{match.age}</span>
-                        </div>
-                        <div className="flex items-center gap-1 text-sm text-gray-600 mb-2">
-                          <MapPin className="w-4 h-4" />
-                          {match.location}
-                        </div>
-                        <p className="text-sm text-gray-700 mb-3 leading-relaxed">
-                          <span className="font-medium text-indigo-600">Match reason:</span> {match.reason}
-                        </p>
-                        <div className="flex gap-2">
-                          <button className="px-4 py-2 rounded-lg bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 transition">
-                            <User className="w-4 h-4 inline mr-1" />
-                            View Profile
-                          </button>
-                          <button className="px-4 py-2 rounded-lg border border-gray-200 text-gray-700 text-sm font-medium hover:bg-gray-50 transition">
-                            Send Message
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
+        {/* Messages */}
+        <main className="flex-1 w-full max-w-2xl mx-auto px-4 pt-5 pb-28">
+          <div className="space-y-4">
+            {messages.length === 0 && !isTyping ? (
+              <div className="text-center text-gray-500 py-12">
+                Ask the AI to find someone for you. Example:{" "}
+                <em>
+                  "friendly product designer in Brooklyn, open to collaboration"
+                </em>
               </div>
+            ) : (
+              messages.map((msg) => (
+                <div
+                  key={msg.id}
+                  className={`flex ${msg.isUser ? "justify-end" : "justify-start"}`}
+                >
+                  <div
+                    className={`whitespace-pre-line px-4 py-2 rounded-lg max-w-[78%] text-sm leading-relaxed ${
+                      msg.isUser
+                        ? "bg-indigo-600 text-white"
+                        : "bg-white border border-gray-200 text-gray-800"
+                    }`}
+                  >
+                    {msg.text}
+                  </div>
+                  {/* add a small info card to show to matches that the user found stored in the matches state */}
+                </div>
+              ))
+            )}
+
+            <div>
+              {matches.map((match) => (
+                <div
+                  key={match.id}
+                  className="mt-3 p-3 bg-white border border-gray-200 rounded-lg shadow-sm flex items-start gap-4"
+                >
+                  <img
+                    src={
+                      match.image ??
+                      "https://images.unsplash.com/photo-1559116315-702b0b4774ce?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8ZHVtbXl8ZW58MHx8MHx8fDA%3D"
+                    }
+                    alt={`${match.name} avatar`}
+                    className="w-24 h-full rounded-md object-cover flex-shrink-0"
+                  />
+                  <div className="flex-1">
+                    <div className="flex items-center justify-between">
+                      <h4 className="font-semibold text-gray-900">
+                        {match.name}
+                      </h4>
+                      <span className="text-sm text-gray-500">{match.age}</span>
+                    </div>
+                    <div className="text-sm text-gray-500">
+                      {match.location}
+                    </div>
+                    <p className="mt-2 text-sm text-gray-600">
+                      Why: {match.reason}
+                    </p>
+                    <button
+                      // onClick={() => handleSelectMatch(match)}
+                      className="mt-2 px-4 py-2 rounded-full bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700"
+                    >
+                      Go to Profile
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
 
             {/* Typing indicator */}
             {isTyping && (
@@ -218,45 +201,53 @@ export default function AIMatch() {
               </div>
             )}
 
-              <div ref={messagesEndRef} />
-            </div>
-          </div>
+            {/* Typing indicator */}
+            {isTyping && (
+              <div className="flex justify-start">
+                <div className="px-4 py-2 rounded-lg bg-white border border-gray-200 text-gray-800 text-sm">
+                  <div className="inline-flex items-center gap-1">
+                    <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" />
+                    <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-150" />
+                    <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-300" />
+                    <span className="ml-2 text-xs text-gray-500">
+                      AI is typing…
+                    </span>
+                  </div>
+                </div>
+              </div>
+            )}
 
-          {/* Enhanced Input Section */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+            <div ref={messagesEndRef} />
+          </div>
+        </main>
+
+        {/* Input */}
+        <div className="fixed bottom-20 flex justify-center px-4 w-full left-36">
+          <div className="w-full max-w-2xl">
             <form
               onSubmit={(e) => {
                 e.preventDefault();
                 handleSendMessage();
               }}
-              className="space-y-3"
+              className="bg-white border border-gray-200 rounded-full shadow-sm px-4 py-3 flex items-center gap-3"
             >
-              <div className="flex items-center gap-3">
-                <div className="flex-1 relative">
-                  <input
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                    placeholder='Describe your ideal match: "creative photographer, 25-35, San Francisco, loves coffee and hiking"'
-                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-300 text-sm"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  disabled={!message.trim() || isTyping}
-                  className={`px-6 py-3 rounded-xl text-sm font-medium flex items-center gap-2 ${
-                    message.trim() && !isTyping
-                      ? "bg-indigo-600 text-white hover:bg-indigo-700"
-                      : "bg-gray-200 text-gray-400 cursor-not-allowed"
-                  }`}
-                >
-                  <Sparkles className="w-4 h-4" />
-                  {isTyping ? "Finding..." : "Find Match"}
-                </button>
-              </div>
-
-              <div className="flex items-center gap-2 text-xs text-gray-500">
-                <span>💡 Try: profession, age range, location, interests, personality traits</span>
-              </div>
+              <input
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                placeholder='Describe who you need, e.g. "product designer, Brooklyn, collaborative"'
+                className="flex-1 outline-none bg-transparent text-gray-800 placeholder-gray-400 text-sm"
+              />
+              <button
+                type="submit"
+                disabled={!message.trim() || isTyping}
+                className={`ml-2 px-4 py-2 rounded-full text-sm font-medium ${
+                  message.trim() && !isTyping
+                    ? "bg-indigo-600 text-white hover:bg-indigo-700"
+                    : "bg-gray-200 text-gray-400 cursor-not-allowed"
+                }`}
+              >
+                Send
+              </button>
             </form>
           </div>
         </div>
