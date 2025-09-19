@@ -849,6 +849,143 @@ export default function InboxNew() {
           </div>
         )}
 
+        {/* Message Detail Modal */}
+        {isMessageModalOpen && selectedMessage && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+            <div className="w-full max-w-4xl bg-white rounded-2xl shadow-2xl overflow-y-auto max-h-[90vh]">
+              <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-4">
+                    <div
+                      className={`w-12 h-12 bg-gradient-to-br ${getAvatarColor(selectedMessage.from)} rounded-full flex items-center justify-center text-white font-semibold shadow-sm`}
+                    >
+                      {selectedMessage.avatar}
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-semibold text-gray-900">
+                        {selectedMessage.from}
+                      </h3>
+                      <div className="flex items-center gap-2 text-sm text-gray-600">
+                        <span>{formatTimestamp(selectedMessage.timestamp)}</span>
+                        <span>•</span>
+                        <span className="capitalize">{selectedMessage.category}</span>
+                        <span>{getMoodEmoji(selectedMessage.mood)}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <button
+                    onClick={closeMessageModal}
+                    className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                  >
+                    <X className="w-5 h-5 text-gray-500" />
+                  </button>
+                </div>
+              </div>
+
+              <div className="p-6 space-y-6">
+                {/* Subject */}
+                <div>
+                  <h2 className="text-2xl font-bold text-gray-900 leading-relaxed">
+                    {selectedMessage.subject}
+                  </h2>
+                  <div className="flex items-center gap-4 mt-2">
+                    {selectedMessage.isStarred && (
+                      <div className="flex items-center gap-1 text-yellow-600">
+                        <Star className="w-4 h-4 fill-current" />
+                        <span className="text-sm">Starred</span>
+                      </div>
+                    )}
+                    {selectedMessage.hasAttachment && (
+                      <div className="flex items-center gap-1 text-gray-600">
+                        <Paperclip className="w-4 h-4" />
+                        <span className="text-sm">Has attachment</span>
+                      </div>
+                    )}
+                    {selectedMessage.replyCount > 0 && (
+                      <div className="flex items-center gap-1 text-gray-600">
+                        <MessageCircle className="w-4 h-4" />
+                        <span className="text-sm">
+                          {selectedMessage.replyCount} {selectedMessage.replyCount === 1 ? 'reply' : 'replies'}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Message Content */}
+                <div className="prose prose-gray max-w-none">
+                  <div className="bg-gray-50 rounded-xl p-6">
+                    <p className="text-gray-800 leading-relaxed whitespace-pre-wrap text-base">
+                      {selectedMessage.preview}
+
+                      {/* Extended content for demo purposes */}
+                      {"\n\n"}I hope this message finds you well. I wanted to reach out because your recent writings have really resonated with me, and I felt compelled to share my thoughts and experiences with you.
+
+                      {"\n\n"}There's something beautiful about connecting with someone through words, especially when those words touch something deep within us. Your perspective on life, creativity, and human connection has given me a lot to think about.
+
+                      {"\n\n"}I've been meaning to write to you for a while now, but I kept putting it off, thinking maybe my thoughts weren't interesting enough or well-formed enough to share. But I realized that's exactly the kind of thinking that prevents us from making meaningful connections.
+
+                      {"\n\n"}Thank you for sharing your authentic voice with the world. It makes a difference to people like me who are also trying to navigate this complex, beautiful journey we call life.
+
+                      {"\n\n"}I'd love to hear your thoughts on this, and if you're open to it, perhaps we could continue this conversation.
+
+                      {"\n\n"}With warmth and appreciation,
+                      {"\n"}{selectedMessage.from}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Attachments (Demo) */}
+                {selectedMessage.hasAttachment && (
+                  <div>
+                    <h4 className="font-medium text-gray-900 mb-3">Attachments</h4>
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                        <Image className="w-5 h-5 text-gray-500" />
+                        <div className="flex-1">
+                          <div className="text-sm font-medium text-gray-900">sunset-photo.jpg</div>
+                          <div className="text-xs text-gray-500">2.3 MB</div>
+                        </div>
+                        <button className="text-sm text-indigo-600 hover:text-indigo-700">Download</button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Action Buttons */}
+                <div className="flex gap-3 pt-4 border-t border-gray-200">
+                  <button className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-colors">
+                    <Reply className="w-4 h-4" />
+                    Reply
+                  </button>
+                  <button className="flex items-center justify-center gap-2 px-6 py-3 border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 transition-colors">
+                    <Forward className="w-4 h-4" />
+                    Forward
+                  </button>
+                  <button className="flex items-center justify-center gap-2 px-6 py-3 border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 transition-colors">
+                    <Archive className="w-4 h-4" />
+                    Archive
+                  </button>
+                  <button
+                    className="flex items-center justify-center gap-2 px-6 py-3 border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 transition-colors"
+                    onClick={() => {
+                      setAllLetters(prev =>
+                        prev.map(l =>
+                          l.id === selectedMessage.id ? { ...l, isStarred: !l.isStarred } : l
+                        )
+                      );
+                      setSelectedMessage(prev => ({...prev, isStarred: !prev.isStarred}));
+                    }}
+                  >
+                    <Star className={`w-4 h-4 ${selectedMessage.isStarred ? 'fill-current text-yellow-500' : ''}`} />
+                    {selectedMessage.isStarred ? 'Unstar' : 'Star'}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Infinite Scroll Trigger & Loading */}
         <div ref={bottomRef} className="py-4">
           {isLoading && (
