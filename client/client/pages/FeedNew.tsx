@@ -1,7 +1,8 @@
 import LayoutNew from "@/components/LayoutNew";
 import { useState, useEffect, useRef } from "react";
+import { Sparkles, Upload, MapPin, User } from "lucide-react";
 
-export default function Feed() {
+export default function AIMatch() {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<
     Array<{ id: number; text: string; isUser: boolean; timestamp: Date }>
