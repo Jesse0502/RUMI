@@ -100,11 +100,22 @@ export default function AIMatch() {
     }
   };
 
-  // Connect WebSocket with retry logic
+  // Detect environment and determine if WebSocket should be used
+  const isProduction = window.location.hostname !== 'localhost' && !window.location.hostname.includes('127.0.0.1');
+  const shouldUseWebSocket = !isProduction && (window.location.hostname === 'localhost' || window.location.hostname.includes('127.0.0.1'));
+
+  // Connect WebSocket with retry logic (only in development)
   useEffect(() => {
+    // If in production or WebSocket shouldn't be used, go directly to demo mode
+    if (!shouldUseWebSocket) {
+      console.log("🔄 Running in production environment, using demo mode");
+      setIsOfflineMode(true);
+      return;
+    }
+
     let reconnectTimeout: NodeJS.Timeout;
     let reconnectAttempts = 0;
-    const maxReconnectAttempts = 5;
+    const maxReconnectAttempts = 3; // Reduced attempts for faster fallback
 
     const connectWebSocket = () => {
       try {
