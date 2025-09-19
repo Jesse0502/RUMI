@@ -20,7 +20,7 @@ import {
   FileText,
   Image,
 } from "lucide-react";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 export default function InboxNew() {
