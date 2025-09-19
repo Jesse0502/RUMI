@@ -170,6 +170,75 @@ export default function ConnectionsNew() {
           </div>
         </div>
 
+        {/* Pending Connection Requests Alert */}
+        {pendingRequests.length > 0 && (
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                  <Users className="w-5 h-5 text-blue-600" />
+                </div>
+                <div>
+                  <h3 className="font-medium text-blue-900">
+                    {pendingRequests.length} Pending Connection Request{pendingRequests.length > 1 ? 's' : ''}
+                  </h3>
+                  <p className="text-sm text-blue-700">
+                    Review and respond to connection requests from other users
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setShowPendingRequests(!showPendingRequests)}
+                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+              >
+                {showPendingRequests ? 'Hide' : 'View'} Requests
+              </button>
+            </div>
+
+            {showPendingRequests && (
+              <div className="mt-4 space-y-3 border-t border-blue-200 pt-4">
+                {pendingRequests.map((request) => (
+                  <div key={request.id} className="bg-white rounded-lg p-4 border border-blue-100">
+                    <div className="flex items-start gap-4">
+                      <div className="w-12 h-12 bg-gradient-to-br from-purple-400 to-pink-500 rounded-full flex items-center justify-center text-white font-semibold">
+                        {request.avatar}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-1">
+                          <h4 className="font-semibold text-gray-900">{request.name}</h4>
+                          <span className="text-xs text-gray-500">
+                            {request.timestamp.toLocaleDateString()}
+                          </span>
+                        </div>
+                        <p className="text-sm text-gray-600 mb-2">
+                          From: "{request.fromMessage}"
+                        </p>
+                        <p className="text-sm text-gray-700 mb-3">
+                          {request.message}
+                        </p>
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => approveRequest(request.id)}
+                            className="bg-green-600 text-white px-4 py-1.5 rounded text-sm hover:bg-green-700 transition-colors"
+                          >
+                            Accept
+                          </button>
+                          <button
+                            onClick={() => declineRequest(request.id)}
+                            className="bg-gray-200 text-gray-700 px-4 py-1.5 rounded text-sm hover:bg-gray-300 transition-colors"
+                          >
+                            Decline
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
         {/* Content */}
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
           {activeTab === "chats"
