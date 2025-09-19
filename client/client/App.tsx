@@ -55,6 +55,7 @@ export default function App() {
           <Toaster />
           <Sonner />
           <BrowserRouter>
+            <ServiceWorkerNavigationHandler />
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/onboarding" element={<OnboardingNew />} />
