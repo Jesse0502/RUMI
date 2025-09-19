@@ -226,6 +226,40 @@ export default function InboxNew() {
     );
   };
 
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(event.target.files || []);
+    setUploadedFiles((prev) => [...prev, ...files]);
+  };
+
+  const removeFile = (index: number) => {
+    setUploadedFiles((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const getFileIcon = (file: File) => {
+    if (file.type.startsWith("image/")) return <Image className="w-4 h-4" />;
+    if (file.type === "application/pdf") return <FileText className="w-4 h-4" />;
+    return <Paperclip className="w-4 h-4" />;
+  };
+
+  const composeLetter = () => {
+    // AI would analyze the content and files to find matching recipients
+    console.log("Composing letter:", letterForm, uploadedFiles);
+
+    // Reset form
+    setLetterForm({
+      title: "",
+      content: "",
+      targetAudience: "",
+      skills: "",
+      lookingFor: "",
+    });
+    setUploadedFiles([]);
+    setShowComposeModal(false);
+
+    // Demo notification
+    alert("Letter composed! AI will analyze your content and send to matching recipients.");
+  };
+
   return (
     <LayoutNew>
       <div className="space-y-6">
