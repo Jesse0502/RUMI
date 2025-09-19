@@ -1,6 +1,7 @@
 import LayoutNew from "@/components/LayoutNew";
 import { useState, useEffect, useRef } from "react";
 import { Sparkles, Upload, MapPin, User } from "lucide-react";
+import { debugError, getWebSocketEventInfo, getErrorInfo, getBrowserInfo } from "@/lib/debug";
 
 export default function AIMatch() {
   const [message, setMessage] = useState("");
