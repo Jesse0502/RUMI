@@ -2,6 +2,8 @@ import LayoutNew from "@/components/LayoutNew";
 import { MessageCircle, Users, Plus, Search, Filter } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import { notifyConnectionAccepted, sendPushNotification } from "@/lib/notifications";
+import { toast } from "sonner";
 
 export default function ConnectionsNew() {
   const [activeTab, setActiveTab] = useState("chats");
