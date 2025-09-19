@@ -42,6 +42,7 @@ export default function InboxNew() {
   const [hasMore, setHasMore] = useState(true);
   const [allLetters, setAllLetters] = useState<any[]>([]);
   const bottomRef = useRef<HTMLDivElement>(null);
+  const nextIdRef = useRef(7); // Start from 7 since initial letters use IDs 1-6
 
   // Generate initial letters
   const initialLetters = [
