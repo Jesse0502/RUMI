@@ -132,7 +132,7 @@ export default function Events() {
       time: "6:00 PM",
       location: "TBD",
       host: "You",
-      image:
+      image: imagePreview ||
         "https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=1200&h=800&fit=crop",
       tags: [form.topic || "Community"],
       price: "Free",
@@ -151,6 +151,7 @@ export default function Events() {
       });
     }
 
+    // Reset form
     setForm({
       title: "",
       date: "",
@@ -159,6 +160,7 @@ export default function Events() {
       autoInvite: false,
     });
     setSelectedInvitees([]);
+    removeImage();
     setShowCreateModal(false);
     alert("Event created (demo)");
   }
