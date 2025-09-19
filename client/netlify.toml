@@ -1,0 +1,18 @@
+[build]
+  command = "pnpm install && pnpm run build"
+  functions = "netlify/functions"
+  publish = "dist/spa"
+
+[build.environment]
+  NPM_FLAGS = "--version"
+
+
+[functions]
+  external_node_modules = ["express"]
+  node_bundler = "esbuild"
+  
+[[redirects]]
+  force = true
+  from = "/api/*"
+  status = 200
+  to = "/.netlify/functions/api/:splat"
