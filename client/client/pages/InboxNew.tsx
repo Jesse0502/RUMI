@@ -366,6 +366,25 @@ export default function InboxNew() {
     return <Paperclip className="w-4 h-4" />;
   };
 
+  const openMessageModal = (letter: any) => {
+    setSelectedMessage(letter);
+    setIsMessageModalOpen(true);
+
+    // Mark message as read if it wasn't already
+    if (!letter.isRead) {
+      setAllLetters(prev =>
+        prev.map(l =>
+          l.id === letter.id ? { ...l, isRead: true } : l
+        )
+      );
+    }
+  };
+
+  const closeMessageModal = () => {
+    setSelectedMessage(null);
+    setIsMessageModalOpen(false);
+  };
+
   const composeLetter = () => {
     // AI would analyze the content and files to find matching recipients
     console.log("Composing letter:", letterForm, uploadedFiles);
