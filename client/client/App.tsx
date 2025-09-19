@@ -69,6 +69,7 @@ export default function App() {
               <Route path="/events" element={<Events />} />
               <Route path="/chat" element={<ChatNew />} />
               <Route path="/settings" element={<Settings />} />
+              <Route path="/test-notifications" element={<TestNotifications />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
