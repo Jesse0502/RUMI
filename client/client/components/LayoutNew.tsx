@@ -347,10 +347,28 @@ export default function LayoutNew({ children }: LayoutProps) {
 
               <button
                 onClick={enablePush}
-                className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-all ml-2"
-                title="Enable notifications"
+                className={`p-2 rounded-lg transition-all ml-2 relative ${
+                  notifEnabled
+                    ? 'text-green-600 hover:text-green-700 hover:bg-green-50'
+                    : notifPermission === 'denied'
+                    ? 'text-red-600 hover:text-red-700 hover:bg-red-50'
+                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                }`}
+                title={
+                  notifEnabled
+                    ? 'Notifications enabled - click to send test notification'
+                    : notifPermission === 'denied'
+                    ? 'Notifications blocked - click to learn how to enable'
+                    : 'Enable notifications'
+                }
               >
                 <Bell className="w-5 h-5" />
+                {notifEnabled && (
+                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
+                )}
+                {notifPermission === 'denied' && (
+                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-white"></div>
+                )}
               </button>
             </div>
           </div>
