@@ -98,16 +98,40 @@ export default function ConnectionsNew() {
     comm.name.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
-  const approveRequest = (requestId: number) => {
-    // In a real app, this would call an API
-    alert("Connection request approved! You can now chat in the normal chat screen.");
-    // Remove from pending requests
-    // setPendingRequests(prev => prev.filter(req => req.id !== requestId));
+  const approveRequest = async (requestId: number) => {
+    const request = pendingRequests.find(req => req.id === requestId);
+    if (!request) return;
+
+    try {
+      // In a real app, this would call an API
+      // Send notification to the requester
+      await notifyConnectionAccepted(request.name, requestId.toString());
+
+      toast.success(`Connection with ${request.name} approved!`, {
+        description: "You can now chat in the normal chat screen",
+        duration: 4000,
+      });
+
+      // Remove from pending requests
+      // setPendingRequests(prev => prev.filter(req => req.id !== requestId));
+    } catch (error) {
+      console.error('Error approving connection:', error);
+      toast.error("Failed to approve connection", {
+        description: "Please try again",
+      });
+    }
   };
 
   const declineRequest = (requestId: number) => {
+    const request = pendingRequests.find(req => req.id === requestId);
+    if (!request) return;
+
     // In a real app, this would call an API
-    alert("Connection request declined.");
+    toast.info(`Connection request from ${request.name} declined`, {
+      description: "The request has been removed",
+      duration: 3000,
+    });
+
     // Remove from pending requests
     // setPendingRequests(prev => prev.filter(req => req.id !== requestId));
   };
