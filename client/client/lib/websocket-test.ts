@@ -107,8 +107,16 @@ export function testWebSocketConnection(url: string = "ws://localhost:8000/ws"):
  */
 export async function runWebSocketDiagnostics() {
   debugLog("🔧 Running WebSocket diagnostics...");
-  
+
+  const isProduction = window.location.hostname !== 'localhost' && !window.location.hostname.includes('127.0.0.1');
+
   const results = {
+    environment: {
+      isProduction,
+      hostname: window.location.hostname,
+      protocol: window.location.protocol,
+      shouldUseWebSocket: !isProduction
+    },
     browserSupport: {
       webSocket: 'WebSocket' in window,
       serviceWorker: 'serviceWorker' in navigator,
