@@ -92,9 +92,33 @@ export default function LayoutNew({ children }: LayoutProps) {
       return;
     }
 
+    if (!("Notification" in window)) {
+      alert("This browser does not support notifications");
+      return;
+    }
+
     try {
+      // Request notification permission first
+      if (Notification.permission === 'default') {
+        const permission = await Notification.requestPermission();
+        setNotifPermission(permission);
+
+        if (permission !== 'granted') {
+          alert("Notification permission denied. You can enable it later in browser settings.");
+          return;
+        }
+      } else if (Notification.permission === 'denied') {
+        alert("Notifications are blocked. Please enable them in your browser settings.");
+        return;
+      }
+
       const reg = await navigator.serviceWorker.register("/service-worker.js");
+      await navigator.serviceWorker.ready; // Wait for service worker to be ready
+
       const vapidRes = await fetch("/api/vapid");
+      if (!vapidRes.ok) {
+        throw new Error(`Failed to fetch VAPID key: ${vapidRes.status}`);
+      }
       const { publicKey } = await vapidRes.json();
 
       function urlBase64ToUint8Array(base64String: string) {
@@ -110,22 +134,58 @@ export default function LayoutNew({ children }: LayoutProps) {
         return outputArray;
       }
 
+      // Check if already subscribed
+      const existingSubscription = await reg.pushManager.getSubscription();
+      if (existingSubscription) {
+        setNotifEnabled(true);
+        alert("Push notifications are already enabled!");
+        return;
+      }
+
       const sub = await reg.pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey: urlBase64ToUint8Array(publicKey),
       });
 
-      await fetch("/api/subscribe", {
+      const subscribeRes = await fetch("/api/subscribe", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(sub),
       });
 
+      if (!subscribeRes.ok) {
+        throw new Error(`Failed to subscribe: ${subscribeRes.status}`);
+      }
+
       setNotifEnabled(true);
-      alert("Push notifications enabled!");
+      setNotifPermission('granted');
+
+      // Send a test notification
+      setTimeout(() => {
+        sendTestNotification();
+      }, 1000);
+
+      alert("Push notifications enabled! You should receive a test notification shortly.");
     } catch (error) {
       console.error("Error enabling push notifications:", error);
-      alert("Error enabling push notifications");
+      alert(`Error enabling push notifications: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
+  }
+
+  // Send a test notification
+  async function sendTestNotification() {
+    try {
+      await fetch("/api/send-push", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: "RUMI Notifications Enabled! 🎉",
+          body: "You'll now receive notifications for new messages, connections, and matches.",
+          data: { url: "/inbox", type: "welcome" }
+        }),
+      });
+    } catch (error) {
+      console.error("Error sending test notification:", error);
     }
   }
 
