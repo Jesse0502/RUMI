@@ -142,7 +142,7 @@ export default function TestNotifications() {
             </div>
             <div className="flex items-center gap-3">
               <div className={`w-3 h-3 rounded-full ${
-                notificationSupport.permission === 'granted' ? 'bg-green-500' : 
+                notificationSupport.permission === 'granted' ? 'bg-green-500' :
                 notificationSupport.permission === 'denied' ? 'bg-red-500' : 'bg-yellow-500'
               }`}></div>
               <span className="text-sm">
@@ -150,7 +150,7 @@ export default function TestNotifications() {
               </span>
             </div>
           </div>
-          
+
           {notificationSupport.permission !== 'granted' && (
             <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
               <p className="text-sm text-yellow-800">
@@ -158,6 +158,26 @@ export default function TestNotifications() {
               </p>
             </div>
           )}
+        </div>
+
+        {/* WebSocket Diagnostics */}
+        <div className="card-elevated p-6">
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">WebSocket Diagnostics</h2>
+          <p className="text-sm text-gray-600 mb-4">
+            Test WebSocket connection to the AI service and debug connection issues.
+          </p>
+          <button
+            onClick={runDiagnostics}
+            disabled={isDiagnosticRunning}
+            className={`btn-primary ${isDiagnosticRunning ? 'opacity-50 cursor-not-allowed' : ''}`}
+          >
+            {isDiagnosticRunning ? 'Running Diagnostics...' : 'Run WebSocket Diagnostics'}
+          </button>
+          <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+            <p className="text-sm text-blue-800">
+              <strong>Note:</strong> Diagnostic results will appear in the browser console. Check DevTools Console for detailed information.
+            </p>
+          </div>
         </div>
 
         {/* Test Notification Buttons */}
