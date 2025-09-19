@@ -29,6 +29,28 @@ export default function AIMatch() {
     }
   };
 
+  // Helper function to get readable WebSocket close codes
+  const getCloseReasonText = (code: number) => {
+    switch (code) {
+      case 1000: return 'Normal closure';
+      case 1001: return 'Going away (page refresh/navigation)';
+      case 1002: return 'Protocol error';
+      case 1003: return 'Unsupported data type';
+      case 1005: return 'No status code';
+      case 1006: return 'Abnormal closure (connection lost)';
+      case 1007: return 'Invalid data';
+      case 1008: return 'Policy violation';
+      case 1009: return 'Message too big';
+      case 1010: return 'Extension required';
+      case 1011: return 'Internal server error';
+      case 1012: return 'Service restart';
+      case 1013: return 'Try again later';
+      case 1014: return 'Bad gateway';
+      case 1015: return 'TLS handshake failure';
+      default: return `Unknown code: ${code}`;
+    }
+  };
+
   // Demo responses for offline mode
   const getDemoResponse = (userMessage: string) => {
     const lowerMessage = userMessage.toLowerCase();
