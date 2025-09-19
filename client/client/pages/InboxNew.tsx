@@ -391,7 +391,7 @@ export default function InboxNew() {
           ? {
               ...l,
               replyCount: l.replyCount + 1,
-              conversation: [...(l.conversation || []), newReply],
+              conversation: l.conversation ? [...l.conversation, newReply] : [newReply],
               timestamp: new Date(), // Update timestamp to show as most recent
               isRead: true,
             }
@@ -403,7 +403,7 @@ export default function InboxNew() {
     setSelectedMessage(prev => ({
       ...prev,
       replyCount: prev.replyCount + 1,
-      conversation: [...(prev.conversation || []), newReply],
+      conversation: prev.conversation ? [...prev.conversation, newReply] : [newReply],
       timestamp: new Date(),
       isRead: true,
     }));
