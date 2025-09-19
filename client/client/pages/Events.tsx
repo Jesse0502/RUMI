@@ -89,6 +89,10 @@ export default function Events() {
     autoInvite: false,
   });
 
+  const [eventImage, setEventImage] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string>("");
+  const imageInputRef = useRef<HTMLInputElement>(null);
+
   const suggestedInvitees = ["Lina", "Marcus", "Sarah", "John"];
   const [selectedInvitees, setSelectedInvitees] = useState<string[]>([]);
 
