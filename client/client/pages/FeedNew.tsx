@@ -253,7 +253,7 @@ export default function AIMatch() {
         socketRef.current.close(1000, "Component unmounting");
       }
     };
-  }, []);
+  }, [shouldUseWebSocket]);
 
   const handleSendMessage = () => {
     if (!message.trim()) return;
