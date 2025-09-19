@@ -945,7 +945,7 @@ export default function InboxNew() {
 
                 {/* Conversation Thread */}
                 <div className="space-y-6">
-                  {selectedMessage.conversation?.map((message: any, index: number) => (
+                  {(selectedMessage.conversation || []).map((message: any, index: number) => (
                     <div key={message.id} className={`flex gap-4 ${message.isFromMe ? 'flex-row-reverse' : ''}`}>
                       {/* Avatar */}
                       <div className="flex-shrink-0">
