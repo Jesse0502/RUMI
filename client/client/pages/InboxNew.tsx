@@ -945,48 +945,57 @@ export default function InboxNew() {
 
                 {/* Conversation Thread */}
                 <div className="space-y-6">
-                  {(selectedMessage.conversation || []).map((message: any, index: number) => (
-                    <div key={message.id} className={`flex gap-4 ${message.isFromMe ? 'flex-row-reverse' : ''}`}>
-                      {/* Avatar */}
-                      <div className="flex-shrink-0">
-                        <div
-                          className={`w-10 h-10 bg-gradient-to-br ${
-                            message.isFromMe
-                              ? 'from-indigo-400 to-purple-500'
-                              : getAvatarColor(message.from)
-                          } rounded-full flex items-center justify-center text-white font-semibold text-sm`}
-                        >
-                          {message.avatar}
+                  {(selectedMessage.conversation || []).length > 0 ? (
+                    (selectedMessage.conversation || []).map((message: any, index: number) => (
+                      <div key={message.id} className={`flex gap-4 ${message.isFromMe ? 'flex-row-reverse' : ''}`}>
+                        {/* Avatar */}
+                        <div className="flex-shrink-0">
+                          <div
+                            className={`w-10 h-10 bg-gradient-to-br ${
+                              message.isFromMe
+                                ? 'from-indigo-400 to-purple-500'
+                                : getAvatarColor(message.from)
+                            } rounded-full flex items-center justify-center text-white font-semibold text-sm`}
+                          >
+                            {message.avatar}
+                          </div>
+                        </div>
+
+                        {/* Message */}
+                        <div className={`flex-1 max-w-[80%] ${message.isFromMe ? 'text-right' : ''}`}>
+                          <div className="flex items-center gap-2 mb-2">
+                            <span className={`text-sm font-medium text-gray-900 ${message.isFromMe ? 'order-2' : ''}`}>
+                              {message.from}
+                            </span>
+                            <span className={`text-xs text-gray-500 ${message.isFromMe ? 'order-1' : ''}`}>
+                              {formatTimestamp(message.timestamp)}
+                            </span>
+                          </div>
+
+                          <div
+                            className={`prose prose-sm max-w-none p-4 rounded-xl ${
+                              message.isFromMe
+                                ? 'bg-indigo-600 text-white rounded-br-md'
+                                : 'bg-gray-50 text-gray-800 rounded-bl-md'
+                            }`}
+                          >
+                            <p className={`whitespace-pre-wrap leading-relaxed m-0 ${
+                              message.isFromMe ? 'text-white' : 'text-gray-800'
+                            }`}>
+                              {message.content}
+                            </p>
+                          </div>
                         </div>
                       </div>
-
-                      {/* Message */}
-                      <div className={`flex-1 max-w-[80%] ${message.isFromMe ? 'text-right' : ''}`}>
-                        <div className="flex items-center gap-2 mb-2">
-                          <span className={`text-sm font-medium text-gray-900 ${message.isFromMe ? 'order-2' : ''}`}>
-                            {message.from}
-                          </span>
-                          <span className={`text-xs text-gray-500 ${message.isFromMe ? 'order-1' : ''}`}>
-                            {formatTimestamp(message.timestamp)}
-                          </span>
-                        </div>
-
-                        <div
-                          className={`prose prose-sm max-w-none p-4 rounded-xl ${
-                            message.isFromMe
-                              ? 'bg-indigo-600 text-white rounded-br-md'
-                              : 'bg-gray-50 text-gray-800 rounded-bl-md'
-                          }`}
-                        >
-                          <p className={`whitespace-pre-wrap leading-relaxed m-0 ${
-                            message.isFromMe ? 'text-white' : 'text-gray-800'
-                          }`}>
-                            {message.content}
-                          </p>
-                        </div>
+                    ))
+                  ) : (
+                    <div className="text-center py-8">
+                      <div className="bg-gray-50 rounded-xl p-6">
+                        <p className="text-gray-600 mb-4">This is the beginning of your conversation with {selectedMessage.from}.</p>
+                        <p className="text-gray-500 text-sm">{selectedMessage.preview}</p>
                       </div>
                     </div>
-                  ))}
+                  )}
                 </div>
 
                 {/* Attachments (Demo) */}
