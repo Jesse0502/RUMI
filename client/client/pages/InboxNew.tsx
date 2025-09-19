@@ -145,7 +145,89 @@ export default function InboxNew() {
     { value: "attachments", label: "Has Attachments" },
   ];
 
-  const filteredLetters = letters
+  // Initialize letters on first load
+  useEffect(() => {
+    if (allLetters.length === 0) {
+      setAllLetters(initialLetters);
+    }
+  }, []);
+
+  // Generate more letters for pagination
+  const generateMoreLetters = (startId: number, count: number) => {
+    const names = ["Alex Johnson", "Maria Garcia", "David Kim", "Sophie Brown", "James Wilson", "Elena Rodriguez", "Michael Zhang", "Isabella Chen"];
+    const subjects = [
+      "Re: Your thoughts on remote work",
+      "Coffee chat invitation",
+      "Collaboration opportunity",
+      "Thank you for your advice",
+      "Weekend hiking plans",
+      "Book recommendation",
+      "Project update",
+      "Networking event follow-up"
+    ];
+
+    return Array.from({ length: count }, (_, i) => {
+      const id = startId + i;
+      const name = names[id % names.length];
+      const subject = subjects[id % subjects.length];
+      return {
+        id,
+        from: name,
+        avatar: name[0],
+        subject: `${subject} #${id}`,
+        preview: `This is a sample message preview for letter ${id}. It contains some interesting content that you might want to read...`,
+        timestamp: new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000),
+        isRead: Math.random() > 0.3,
+        isStarred: Math.random() > 0.8,
+        hasAttachment: Math.random() > 0.7,
+        category: ["personal", "work", "creative", "social"][Math.floor(Math.random() * 4)],
+        mood: ["friendly", "professional", "excited", "thoughtful"][Math.floor(Math.random() * 4)],
+        replyCount: Math.floor(Math.random() * 3),
+      };
+    });
+  };
+
+  // Load more letters
+  const loadMoreLetters = () => {
+    if (isLoading || !hasMore) return;
+
+    setIsLoading(true);
+    setTimeout(() => {
+      const newLetters = generateMoreLetters(allLetters.length + 1, 10);
+      setAllLetters(prev => [...prev, ...newLetters]);
+      setPage(prev => prev + 1);
+      setIsLoading(false);
+
+      // Stop loading after 5 pages
+      if (page >= 5) {
+        setHasMore(false);
+      }
+    }, 1000);
+  };
+
+  // Intersection Observer for infinite scroll
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasMore && !isLoading) {
+          loadMoreLetters();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (bottomRef.current) {
+      observer.observe(bottomRef.current);
+    }
+
+    return () => {
+      if (bottomRef.current) {
+        observer.unobserve(bottomRef.current);
+      }
+    };
+  }, [hasMore, isLoading, page]);
+
+  const filteredLetters = allLetters
     .filter((letter) => {
       if (selectedFilter === "unread") return !letter.isRead;
       if (selectedFilter === "starred") return letter.isStarred;
@@ -160,8 +242,8 @@ export default function InboxNew() {
         letter.preview.toLowerCase().includes(searchQuery.toLowerCase()),
     );
 
-  const unreadCount = letters.filter((l) => !l.isRead).length;
-  const starredCount = letters.filter((l) => l.isStarred).length;
+  const unreadCount = allLetters.filter((l) => !l.isRead).length;
+  const starredCount = allLetters.filter((l) => l.isStarred).length;
 
   const formatTimestamp = (date: Date) => {
     const now = new Date();
@@ -698,6 +780,23 @@ export default function InboxNew() {
             </div>
           </div>
         )}
+
+        {/* Infinite Scroll Trigger & Loading */}
+        <div ref={bottomRef} className="py-4">
+          {isLoading && (
+            <div className="text-center">
+              <div className="inline-flex items-center gap-2 text-sm text-gray-500">
+                <div className="w-4 h-4 border-2 border-gray-300 border-t-indigo-600 rounded-full animate-spin"></div>
+                Loading more messages...
+              </div>
+            </div>
+          )}
+          {!hasMore && allLetters.length > initialLetters.length && (
+            <div className="text-center text-sm text-gray-500 py-4">
+              You've reached the end of your messages
+            </div>
+          )}
+        </div>
       </div>
     </LayoutNew>
   );
