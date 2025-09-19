@@ -419,8 +419,11 @@ export default function InboxNew() {
     setReplyContent("");
     setReplyAttachments([]);
 
-    // Demo notification
-    alert(`Reply sent to ${selectedMessage.from}!`);
+    // Show toast notification
+    toast.success(`Reply sent to ${selectedMessage.from}!`, {
+      description: "Your message has been delivered",
+      duration: 3000,
+    });
   };
 
   const composeLetter = () => {
