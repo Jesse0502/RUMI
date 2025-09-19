@@ -46,7 +46,7 @@ export default function InboxNew() {
   const [hasMore, setHasMore] = useState(true);
   const [allLetters, setAllLetters] = useState<any[]>([]);
   const bottomRef = useRef<HTMLDivElement>(null);
-  const nextIdRef = useRef(9); // Start from 9 since initial letters use IDs 1-8
+  const nextIdRef = useRef(4); // Start from 4 since initial letters use IDs 1-3
 
   // Generate initial letters with conversation threads
   const initialLetters = [
