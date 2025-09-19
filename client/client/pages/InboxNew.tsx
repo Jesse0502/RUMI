@@ -194,10 +194,10 @@ export default function InboxNew() {
 
     setIsLoading(true);
     setTimeout(() => {
-      setAllLetters(prev => {
-        const newLetters = generateMoreLetters(prev.length + 1, 10);
-        return [...prev, ...newLetters];
-      });
+      const newLetters = generateMoreLetters(10);
+      nextIdRef.current += 10; // Update next ID for future generations
+
+      setAllLetters(prev => [...prev, ...newLetters]);
       setPage(prev => {
         const newPage = prev + 1;
         // Stop loading after 5 pages
