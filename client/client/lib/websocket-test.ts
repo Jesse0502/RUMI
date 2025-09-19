@@ -127,27 +127,40 @@ export async function runWebSocketDiagnostics() {
     connectionTests: [] as any[]
   };
   
-  // Test different URLs
-  const testUrls = [
-    "ws://localhost:8000/ws",
-    "ws://127.0.0.1:8000/ws",
-    "wss://localhost:8000/ws"
-  ];
-  
-  for (const url of testUrls) {
-    try {
-      const result = await testWebSocketConnection(url);
-      results.connectionTests.push({
-        url,
-        ...result
-      });
-    } catch (error) {
-      results.connectionTests.push({
-        url,
-        success: false,
-        error: error instanceof Error ? error.message : "Unknown error",
-        details: { error }
-      });
+  if (isProduction) {
+    // In production, don't test WebSocket connections to localhost
+    results.connectionTests.push({
+      url: "N/A",
+      success: false,
+      error: "WebSocket testing skipped in production environment",
+      details: {
+        message: "App is running in production mode with demo responses",
+        recommendation: "WebSocket connections are only available in development (localhost)"
+      }
+    });
+  } else {
+    // Test different URLs only in development
+    const testUrls = [
+      "ws://localhost:8000/ws",
+      "ws://127.0.0.1:8000/ws",
+      "wss://localhost:8000/ws"
+    ];
+
+    for (const url of testUrls) {
+      try {
+        const result = await testWebSocketConnection(url);
+        results.connectionTests.push({
+          url,
+          ...result
+        });
+      } catch (error) {
+        results.connectionTests.push({
+          url,
+          success: false,
+          error: error instanceof Error ? error.message : "Unknown error",
+          details: { error }
+        });
+      }
     }
   }
   
