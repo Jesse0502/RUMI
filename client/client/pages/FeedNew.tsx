@@ -220,16 +220,11 @@ export default function AIMatch() {
         };
 
       } catch (connectionError) {
-        console.error("❌ Failed to create WebSocket connection:", {
-          error: connectionError instanceof Error ? {
-            name: connectionError.name,
-            message: connectionError.message,
-            stack: connectionError.stack
-          } : connectionError,
+        debugError("❌ Failed to create WebSocket connection:", {
+          error: getErrorInfo(connectionError),
           url: "ws://localhost:8000/ws",
-          timestamp: new Date().toISOString(),
-          userAgent: navigator.userAgent,
-          reconnectAttempts: reconnectAttempts
+          reconnectAttempts: reconnectAttempts,
+          browserInfo: getBrowserInfo()
         });
 
         // Add user-friendly error message
