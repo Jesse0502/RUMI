@@ -519,6 +519,179 @@ export default function InboxNew() {
             </div>
           </div>
         )}
+
+        {/* Compose Letter Modal */}
+        {showComposeModal && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+            <div className="w-full max-w-2xl bg-white rounded-2xl shadow-2xl overflow-y-auto max-h-[90vh]">
+              <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-xl font-semibold text-gray-900">Compose Letter</h3>
+                  <button
+                    onClick={() => setShowComposeModal(false)}
+                    className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                  >
+                    <X className="w-5 h-5 text-gray-500" />
+                  </button>
+                </div>
+                <p className="text-sm text-gray-600 mt-1">
+                  AI will analyze your letter and send it to people who match your criteria
+                </p>
+              </div>
+
+              <div className="p-6 space-y-6">
+                {/* Letter Content */}
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Letter Title
+                    </label>
+                    <input
+                      type="text"
+                      value={letterForm.title}
+                      onChange={(e) => setLetterForm({ ...letterForm, title: e.target.value })}
+                      placeholder="e.g., Looking for a Co-founder for My Startup"
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-300"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Your Message
+                    </label>
+                    <textarea
+                      value={letterForm.content}
+                      onChange={(e) => setLetterForm({ ...letterForm, content: e.target.value })}
+                      rows={8}
+                      placeholder="Share your story, idea, or what you're looking for. Be detailed and authentic - this helps AI find the right people for you."
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-300 resize-none"
+                    />
+                  </div>
+                </div>
+
+                {/* File Upload */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Attachments (Images, PDFs, Documents)
+                  </label>
+                  <div className="space-y-3">
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      multiple
+                      accept="image/*,.pdf,.doc,.docx,.txt"
+                      onChange={handleFileUpload}
+                      className="hidden"
+                    />
+                    <button
+                      onClick={() => fileInputRef.current?.click()}
+                      className="w-full p-4 border-2 border-dashed border-gray-300 rounded-xl hover:border-indigo-400 hover:bg-indigo-50 transition-colors flex flex-col items-center gap-2"
+                    >
+                      <Upload className="w-6 h-6 text-gray-400" />
+                      <span className="text-sm text-gray-600">
+                        Click to upload files or drag and drop
+                      </span>
+                      <span className="text-xs text-gray-500">
+                        Images, PDFs, documents up to 10MB each
+                      </span>
+                    </button>
+
+                    {uploadedFiles.length > 0 && (
+                      <div className="space-y-2">
+                        {uploadedFiles.map((file, index) => (
+                          <div
+                            key={index}
+                            className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg"
+                          >
+                            {getFileIcon(file)}
+                            <div className="flex-1 min-w-0">
+                              <div className="text-sm font-medium text-gray-900 truncate">
+                                {file.name}
+                              </div>
+                              <div className="text-xs text-gray-500">
+                                {(file.size / 1024 / 1024).toFixed(2)} MB
+                              </div>
+                            </div>
+                            <button
+                              onClick={() => removeFile(index)}
+                              className="p-1 hover:bg-gray-200 rounded"
+                            >
+                              <X className="w-4 h-4 text-gray-500" />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* AI Matching Criteria */}
+                <div className="space-y-4 border-t border-gray-200 pt-6">
+                  <h4 className="font-medium text-gray-900">Help AI Find the Right People</h4>
+
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Who are you looking for?
+                      </label>
+                      <input
+                        type="text"
+                        value={letterForm.targetAudience}
+                        onChange={(e) => setLetterForm({ ...letterForm, targetAudience: e.target.value })}
+                        placeholder="e.g., entrepreneurs, developers, designers"
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Required skills/expertise
+                      </label>
+                      <input
+                        type="text"
+                        value={letterForm.skills}
+                        onChange={(e) => setLetterForm({ ...letterForm, skills: e.target.value })}
+                        placeholder="e.g., React, UI/UX, marketing"
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      What are you offering/looking for?
+                    </label>
+                    <input
+                      type="text"
+                      value={letterForm.lookingFor}
+                      onChange={(e) => setLetterForm({ ...letterForm, lookingFor: e.target.value })}
+                      placeholder="e.g., co-founder position, collaboration, mentorship"
+                      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300"
+                    />
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex gap-3 pt-4 border-t border-gray-200">
+                  <button
+                    onClick={() => setShowComposeModal(false)}
+                    className="flex-1 px-6 py-3 border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={composeLetter}
+                    disabled={!letterForm.title || !letterForm.content}
+                    className="flex-1 px-6 py-3 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
+                  >
+                    <Send className="w-4 h-4" />
+                    Send Letter
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </LayoutNew>
   );
