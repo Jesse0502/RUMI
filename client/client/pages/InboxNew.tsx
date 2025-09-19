@@ -415,6 +415,7 @@ export default function InboxNew() {
     // Reset reply state
     setIsReplying(false);
     setReplyContent("");
+    setReplyAttachments([]);
 
     // Demo notification
     alert(`Reply sent to ${selectedMessage.from}!`);
