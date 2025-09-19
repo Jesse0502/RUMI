@@ -23,6 +23,30 @@ import Settings from "./pages/Settings";
 
 const queryClient = new QueryClient();
 
+// Component to handle service worker navigation messages
+function ServiceWorkerNavigationHandler() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if ('serviceWorker' in navigator) {
+      const messageHandler = (event: MessageEvent) => {
+        if (event.data && event.data.type === 'NAVIGATE_TO') {
+          console.log('[App] Navigating to:', event.data.url);
+          navigate(event.data.url);
+        }
+      };
+
+      navigator.serviceWorker.addEventListener('message', messageHandler);
+
+      return () => {
+        navigator.serviceWorker.removeEventListener('message', messageHandler);
+      };
+    }
+  }, [navigate]);
+
+  return null;
+}
+
 export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
