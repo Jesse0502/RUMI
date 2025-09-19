@@ -372,6 +372,7 @@ export default function InboxNew() {
     setIsReplying(!isReplying);
     if (isReplying) {
       setReplyContent("");
+      setReplyAttachments([]);
     }
   };
 
