@@ -1,6 +1,7 @@
 import LayoutNew from "@/components/LayoutNew";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { Upload, X, Image } from "lucide-react";
 
 export default function Events() {
   const navigate = useNavigate();
@@ -88,6 +89,10 @@ export default function Events() {
     autoInvite: false,
   });
 
+  const [eventImage, setEventImage] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string>("");
+  const imageInputRef = useRef<HTMLInputElement>(null);
+
   const suggestedInvitees = ["Lina", "Marcus", "Sarah", "John"];
   const [selectedInvitees, setSelectedInvitees] = useState<string[]>([]);
 
@@ -95,6 +100,26 @@ export default function Events() {
     setSelectedInvitees((prev) =>
       prev.includes(name) ? prev.filter((p) => p !== name) : [...prev, name],
     );
+  }
+
+  function handleImageUpload(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    if (file) {
+      setEventImage(file);
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setImagePreview(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  function removeImage() {
+    setEventImage(null);
+    setImagePreview("");
+    if (imageInputRef.current) {
+      imageInputRef.current.value = "";
+    }
   }
 
   function createEvent() {
@@ -107,7 +132,7 @@ export default function Events() {
       time: "6:00 PM",
       location: "TBD",
       host: "You",
-      image:
+      image: imagePreview ||
         "https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=1200&h=800&fit=crop",
       tags: [form.topic || "Community"],
       price: "Free",
@@ -126,6 +151,7 @@ export default function Events() {
       });
     }
 
+    // Reset form
     setForm({
       title: "",
       date: "",
@@ -134,6 +160,7 @@ export default function Events() {
       autoInvite: false,
     });
     setSelectedInvitees([]);
+    removeImage();
     setShowCreateModal(false);
     alert("Event created (demo)");
   }
@@ -385,6 +412,51 @@ export default function Events() {
                   placeholder="Describe the event..."
                   className="w-full border rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-300 resize-none"
                 />
+
+                {/* Image Upload */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Event Image
+                  </label>
+                  <input
+                    ref={imageInputRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    className="hidden"
+                  />
+
+                  {!imagePreview ? (
+                    <button
+                      type="button"
+                      onClick={() => imageInputRef.current?.click()}
+                      className="w-full p-4 border-2 border-dashed border-gray-300 rounded-xl hover:border-indigo-400 hover:bg-indigo-50 transition-colors flex flex-col items-center gap-2"
+                    >
+                      <Upload className="w-6 h-6 text-gray-400" />
+                      <span className="text-sm text-gray-600">
+                        Upload event image
+                      </span>
+                      <span className="text-xs text-gray-500">
+                        JPG, PNG up to 5MB
+                      </span>
+                    </button>
+                  ) : (
+                    <div className="relative">
+                      <img
+                        src={imagePreview}
+                        alt="Event preview"
+                        className="w-full h-32 object-cover rounded-xl"
+                      />
+                      <button
+                        type="button"
+                        onClick={removeImage}
+                        className="absolute top-2 right-2 p-1 bg-white rounded-full shadow hover:bg-gray-100"
+                      >
+                        <X className="w-4 h-4 text-gray-500" />
+                      </button>
+                    </div>
+                  )}
+                </div>
 
                 <label className="flex items-center gap-3">
                   <input

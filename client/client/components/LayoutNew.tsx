@@ -9,7 +9,7 @@ import {
   Calendar,
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   useBackground,
   getBackgroundClasses,
@@ -23,12 +23,33 @@ interface LayoutProps {
 export default function LayoutNew({ children }: LayoutProps) {
   const location = useLocation();
   const [notifEnabled, setNotifEnabled] = useState(false);
+  const [notifPermission, setNotifPermission] = useState<NotificationPermission>('default');
 
   // Get background context with fallback
   const backgroundContext = useBackground();
   const backgroundType = backgroundContext?.backgroundType || "solid";
   const solidColor = backgroundContext?.solidColor || "#f9fafb";
   const backgroundProps = getBackgroundClasses(backgroundType, solidColor);
+
+  // Check notification permission status on mount
+  useEffect(() => {
+    if ('Notification' in window) {
+      setNotifPermission(Notification.permission);
+
+      // Check if already subscribed
+      if ('serviceWorker' in navigator && Notification.permission === 'granted') {
+        navigator.serviceWorker.ready.then(reg => {
+          reg.pushManager.getSubscription().then(subscription => {
+            if (subscription) {
+              setNotifEnabled(true);
+            }
+          }).catch(error => {
+            console.warn('Error checking push subscription:', error);
+          });
+        });
+      }
+    }
+  }, []);
 
   const navigationItems = [
     {
@@ -71,9 +92,33 @@ export default function LayoutNew({ children }: LayoutProps) {
       return;
     }
 
+    if (!("Notification" in window)) {
+      alert("This browser does not support notifications");
+      return;
+    }
+
     try {
+      // Request notification permission first
+      if (Notification.permission === 'default') {
+        const permission = await Notification.requestPermission();
+        setNotifPermission(permission);
+
+        if (permission !== 'granted') {
+          alert("Notification permission denied. You can enable it later in browser settings.");
+          return;
+        }
+      } else if (Notification.permission === 'denied') {
+        alert("Notifications are blocked. Please enable them in your browser settings.");
+        return;
+      }
+
       const reg = await navigator.serviceWorker.register("/service-worker.js");
+      await navigator.serviceWorker.ready; // Wait for service worker to be ready
+
       const vapidRes = await fetch("/api/vapid");
+      if (!vapidRes.ok) {
+        throw new Error(`Failed to fetch VAPID key: ${vapidRes.status}`);
+      }
       const { publicKey } = await vapidRes.json();
 
       function urlBase64ToUint8Array(base64String: string) {
@@ -89,22 +134,60 @@ export default function LayoutNew({ children }: LayoutProps) {
         return outputArray;
       }
 
+      // Check if already subscribed
+      const existingSubscription = await reg.pushManager.getSubscription();
+      if (existingSubscription) {
+        setNotifEnabled(true);
+        // Send test notification if already enabled
+        sendTestNotification();
+        alert("Push notifications are already enabled! Sending test notification...");
+        return;
+      }
+
       const sub = await reg.pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey: urlBase64ToUint8Array(publicKey),
       });
 
-      await fetch("/api/subscribe", {
+      const subscribeRes = await fetch("/api/subscribe", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(sub),
       });
 
+      if (!subscribeRes.ok) {
+        throw new Error(`Failed to subscribe: ${subscribeRes.status}`);
+      }
+
       setNotifEnabled(true);
-      alert("Push notifications enabled!");
+      setNotifPermission('granted');
+
+      // Send a test notification
+      setTimeout(() => {
+        sendTestNotification();
+      }, 1000);
+
+      alert("Push notifications enabled! You should receive a test notification shortly.");
     } catch (error) {
       console.error("Error enabling push notifications:", error);
-      alert("Error enabling push notifications");
+      alert(`Error enabling push notifications: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
+  }
+
+  // Send a test notification
+  async function sendTestNotification() {
+    try {
+      await fetch("/api/send-push", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: "RUMI Notifications Enabled! 🎉",
+          body: "You'll now receive notifications for new messages, connections, and matches.",
+          data: { url: "/inbox", type: "welcome" }
+        }),
+      });
+    } catch (error) {
+      console.error("Error sending test notification:", error);
     }
   }
 
@@ -130,9 +213,28 @@ export default function LayoutNew({ children }: LayoutProps) {
             <div className="flex items-center gap-3">
               <button
                 onClick={enablePush}
-                className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-all"
+                className={`p-2 rounded-lg transition-all relative ${
+                  notifEnabled
+                    ? 'text-green-600 hover:text-green-700 hover:bg-green-50'
+                    : notifPermission === 'denied'
+                    ? 'text-red-600 hover:text-red-700 hover:bg-red-50'
+                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                }`}
+                title={
+                  notifEnabled
+                    ? 'Notifications enabled'
+                    : notifPermission === 'denied'
+                    ? 'Notifications blocked - click to learn how to enable'
+                    : 'Enable notifications'
+                }
               >
                 <Bell className="w-5 h-5" />
+                {notifEnabled && (
+                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
+                )}
+                {notifPermission === 'denied' && (
+                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-white"></div>
+                )}
               </button>
               <Link
                 to="/profile"
@@ -247,10 +349,28 @@ export default function LayoutNew({ children }: LayoutProps) {
 
               <button
                 onClick={enablePush}
-                className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-all ml-2"
-                title="Enable notifications"
+                className={`p-2 rounded-lg transition-all ml-2 relative ${
+                  notifEnabled
+                    ? 'text-green-600 hover:text-green-700 hover:bg-green-50'
+                    : notifPermission === 'denied'
+                    ? 'text-red-600 hover:text-red-700 hover:bg-red-50'
+                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                }`}
+                title={
+                  notifEnabled
+                    ? 'Notifications enabled - click to send test notification'
+                    : notifPermission === 'denied'
+                    ? 'Notifications blocked - click to learn how to enable'
+                    : 'Enable notifications'
+                }
               >
                 <Bell className="w-5 h-5" />
+                {notifEnabled && (
+                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
+                )}
+                {notifPermission === 'denied' && (
+                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-white"></div>
+                )}
               </button>
             </div>
           </div>

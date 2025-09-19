@@ -1,171 +1,209 @@
 import LayoutNew from "@/components/LayoutNew";
-import { ArrowLeft } from "lucide-react";
+import { Settings as SettingsIcon, BadgeCheck } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
+
+interface ProfileData {
+  name: string;
+  email: string;
+  age: string;
+  location: string;
+  bio: string;
+  skills: string[];
+  groups: string[];
+}
+interface MetricPoint { date: string; impressions: number; clicks: number; spend: number }
+interface Campaign { id: string; status: "running" | "paused"; timeseries: MetricPoint[] }
+
+const PROFILE_KEY = "rumi_profile";
+const CAMPAIGNS_KEY = "rumi_campaigns";
+
+function loadProfile(): ProfileData {
+  const raw = localStorage.getItem(PROFILE_KEY);
+  if (raw) return JSON.parse(raw) as ProfileData;
+  return {
+    name: "Alex Mangachinana",
+    email: "alex@email.com",
+    age: "28",
+    location: "Melbourne, AU",
+    bio:
+      "I'm a graphic designer who finds magic in everyday moments. I love early morning walks, handwritten letters, and the way light filters through coffee shop windows. Always searching for authentic connections and meaningful conversations.",
+    skills: ["Graphic Design", "Photography", "Social Media"],
+    groups: ["Designers AU", "Melbourne Creatives"],
+  };
+}
+
+function loadCampaigns(): Campaign[] {
+  const raw = localStorage.getItem(CAMPAIGNS_KEY);
+  if (!raw) return [];
+  return JSON.parse(raw) as Campaign[];
+}
 
 export default function Profile() {
+  const [profile, setProfile] = useState<ProfileData>(loadProfile());
+  const campaigns = loadCampaigns();
+
+  useEffect(() => {
+    const onStorage = () => setProfile(loadProfile());
+    window.addEventListener("storage", onStorage);
+    return () => window.removeEventListener("storage", onStorage);
+  }, []);
+
+  const stats = useMemo(() => {
+    const running = campaigns.filter((c) => c.status === "running");
+    const last = running.flatMap((c) => c.timeseries);
+    const totalImpr = last.reduce((a, b) => a + b.impressions, 0);
+    const totalClicks = last.reduce((a, b) => a + b.clicks, 0);
+    return { running: running.length, impressions: totalImpr, clicks: totalClicks };
+  }, [campaigns]);
+
+  const initials = profile.name
+    .split(" ")
+    .map((s) => s[0])
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
+
   return (
     <LayoutNew>
-      <div className="min-h-screen">
-        <div className="p-0 space-y-6">
-          {/* Profile Avatar and Name */}
-          <div className="flex flex-col items-center py-6">
-            <div className="w-20 h-20 bg-gray-300 rounded-full mb-4 flex items-center justify-center">
-              <div className="w-16 h-16 bg-gray-400 rounded-full"></div>
-            </div>
-            <h2 className="text-xl font-semibold text-center">
-              Alex
-              <br />
-              Mangachinana
-            </h2>
-            <span className="inline-block bg-rumi-purple text-white text-xs px-3 py-1 rounded-full mt-2">
-              Verified
-            </span>
-          </div>
-
-          {/* Form Section */}
-          <div className="bg-rumi-gray-light rounded-2xl p-4 space-y-4">
+      <div className="min-h-screen bg-neutral-50">
+        <div className="max-w-5xl mx-auto py-8 px-4 lg:px-0">
+          {/* Header Section */}
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Full Name
-              </label>
-              <input
-                type="text"
-                defaultValue="Alex Mangachinana"
-                className="w-full p-3 bg-white rounded-lg border-0 text-gray-600"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Email
-              </label>
-              <input
-                type="email"
-                defaultValue="alex@email.com"
-                className="w-full p-3 bg-white rounded-lg border-0 text-gray-600"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Age
-              </label>
-              <input
-                type="text"
-                defaultValue="28"
-                className="w-full p-3 bg-white rounded-lg border-0 text-gray-600"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Location
-              </label>
-              <input
-                type="text"
-                defaultValue="Melbourne, AU"
-                className="w-full p-3 bg-white rounded-lg border-0 text-gray-600"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Bio
-              </label>
-              <textarea
-                rows={4}
-                defaultValue="I'm a graphic designer who finds magic in everyday moments. I love early morning walks, handwritten letters, and the way light filters through coffee shop windows. Always searching for authentic connections and meaningful conversations."
-                className="w-full p-3 bg-white rounded-lg border-0 text-gray-600 resize-none"
-              />
-            </div>
-          </div>
-
-          {/* Interests & Hobbies */}
-          <div className="space-y-4">
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-6 bg-red-500 rounded-full flex items-center justify-center">
-                <span className="text-white text-sm">🎯</span>
-              </div>
-              <h3 className="text-lg font-semibold">Interests & Hobbies</h3>
-            </div>
-
-            <div className="bg-rumi-gray-light rounded-lg p-3 mb-3">
-              <input
-                type="text"
-                placeholder="Add an interest or hobby"
-                className="w-full bg-transparent border-0 text-gray-600 placeholder-gray-400"
-              />
-            </div>
-
-            <button className="w-full bg-rumi-purple text-white py-3 rounded-lg font-medium mb-4">
-              Add
-            </button>
-
-            <div className="flex gap-2 flex-wrap">
-              <span className="bg-rumi-purple text-white px-4 py-2 rounded-full text-sm">
-                Music
-              </span>
-              <span className="bg-rumi-purple text-white px-4 py-2 rounded-full text-sm">
-                Biking
-              </span>
-            </div>
-
-            <p className="text-xs text-gray-600 mt-4">
-              Add interests and hobbies that represent who you are. These help
-              our AI understand your personality for better letter matching.
-            </p>
-          </div>
-
-          {/* AI Matching Preferences */}
-          <div className="space-y-4">
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-6 bg-purple-100 rounded flex items-center justify-center">
-                <span className="text-rumi-purple text-sm">🤖</span>
-              </div>
-              <h3 className="text-lg font-semibold">AI Matching Preferences</h3>
-            </div>
-
-            <p className="text-sm text-gray-600">
-              Personal Preferences for AI Matching
-            </p>
-
-            <div className="bg-rumi-purple text-white p-4 rounded-lg space-y-3">
-              <p className="text-sm">
-                I'm drawn to thoughtful, introspective people who appreciate
-                life's small details. I'd love to connect with fellow creatives,
-                deep thinkers, or anyone who finds beauty in everyday moments.
-              </p>
-              <p className="text-sm">
-                I'm particularly interested in letters about:
-              </p>
-              <p className="text-sm">Personal growth and self-discovery.</p>
-              <p className="text-sm">
-                Be as specific or general as you'd like. This helps our AI
-                understand what letters and writers would resonate with you
-                most.
+              <h1 className="text-3xl font-extrabold text-gray-900">Profile</h1>
+              <p className="text-sm text-gray-500 mt-1">
+                Your public profile and activity
               </p>
             </div>
+
+            <Link
+              to="/settings"
+              className="inline-flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-full text-sm font-medium shadow hover:bg-indigo-700 transition"
+            >
+              <SettingsIcon className="w-4 h-4" />
+              Settings
+            </Link>
           </div>
 
-          {/* Privacy Note */}
-          <div className="space-y-2">
-            <div className="flex items-center gap-2">
-              <div className="w-5 h-5 bg-purple-100 rounded flex items-center justify-center">
-                <span className="text-rumi-purple text-xs">🔒</span>
+          {/* Profile Header Card */}
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-6">
+            <div className="h-32 bg-gradient-to-r from-rumi-purple to-rumi-purple-light" />
+            <div className="px-6 pb-6">
+              <div className="-mt-10 flex items-end gap-4">
+                <div className="w-20 h-20 rounded-full bg-white shadow-lg border-4 border-white flex items-center justify-center text-rumi-purple text-xl font-bold">
+                  {initials}
+                </div>
+                <div className="pb-2">
+                  <div className="flex items-center gap-2">
+                    <h2 className="text-2xl font-bold text-gray-900">{profile.name}</h2>
+                    <BadgeCheck className="w-5 h-5 text-rumi-purple" />
+                    <span className="text-xs bg-rumi-purple text-white px-2 py-1 rounded-full font-medium">
+                      Verified
+                    </span>
+                  </div>
+                  <div className="text-gray-600 mt-1">{profile.location}</div>
+                </div>
               </div>
-              <span className="text-sm font-medium">Privacy Note</span>
             </div>
-            <p className="text-xs text-gray-600">
-              These preferences are only used by our AI for matching purposes
-              and are never shared with other users or included in your public
-              profile.
-            </p>
           </div>
 
-          {/* Save Button */}
-          <button className="w-full bg-rumi-purple text-white py-3 rounded-lg font-medium mt-6">
-            Save Changes
-          </button>
+          <div className="grid lg:grid-cols-3 gap-6">
+            {/* Main Content */}
+            <div className="lg:col-span-2 space-y-6">
+              {/* About Section */}
+              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">About</h3>
+                <p className="text-gray-700 leading-relaxed whitespace-pre-line">{profile.bio}</p>
+              </div>
+
+              {/* Skills Section */}
+              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Skills & Expertise</h3>
+                <div className="flex flex-wrap gap-2">
+                  {profile.skills.map((skill) => (
+                    <span
+                      key={skill}
+                      className="bg-indigo-100 text-indigo-700 px-3 py-2 rounded-full text-sm font-medium"
+                    >
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Groups Section */}
+              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Communities</h3>
+                <div className="flex flex-wrap gap-2">
+                  {profile.groups.map((group) => (
+                    <span
+                      key={group}
+                      className="bg-gray-100 text-gray-700 px-3 py-2 rounded-full text-sm font-medium border"
+                    >
+                      {group}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Sidebar */}
+            <div className="space-y-6">
+              {/* Activity Stats */}
+              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <h4 className="font-semibold text-gray-900 mb-4">Activity</h4>
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-gray-600">Letters sent</span>
+                    <span className="font-semibold text-gray-900">12</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-gray-600">Connections</span>
+                    <span className="font-semibold text-gray-900">8</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-gray-600">Events joined</span>
+                    <span className="font-semibold text-gray-900">3</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Advertising Overview */}
+              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <h4 className="font-semibold text-gray-900 mb-4">Advertising</h4>
+                <div className="grid grid-cols-3 gap-4 text-center mb-4">
+                  <div>
+                    <div className="text-xs text-gray-500 mb-1">Running</div>
+                    <div className="text-lg font-bold text-green-600">{stats.running}</div>
+                  </div>
+                  <div>
+                    <div className="text-xs text-gray-500 mb-1">Views</div>
+                    <div className="text-lg font-bold text-blue-600">{stats.impressions}</div>
+                  </div>
+                  <div>
+                    <div className="text-xs text-gray-500 mb-1">Clicks</div>
+                    <div className="text-lg font-bold text-purple-600">{stats.clicks}</div>
+                  </div>
+                </div>
+                <Link
+                  to="/settings"
+                  className="block w-full text-center bg-indigo-600 text-white py-2 rounded-lg font-medium hover:bg-indigo-700 transition"
+                >
+                  Manage Ads
+                </Link>
+              </div>
+
+              {/* Contact */}
+              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <h4 className="font-semibold text-gray-900 mb-4">Contact</h4>
+                <div className="space-y-2">
+                  <div className="text-sm text-gray-600">Email</div>
+                  <div className="text-sm font-medium text-gray-900">{profile.email}</div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </LayoutNew>

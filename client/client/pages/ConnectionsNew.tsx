@@ -2,10 +2,32 @@ import LayoutNew from "@/components/LayoutNew";
 import { MessageCircle, Users, Plus, Search, Filter } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import { notifyConnectionAccepted, sendPushNotification } from "@/lib/notifications";
+import { toast } from "sonner";
 
 export default function ConnectionsNew() {
   const [activeTab, setActiveTab] = useState("chats");
   const [searchQuery, setSearchQuery] = useState("");
+  const [showPendingRequests, setShowPendingRequests] = useState(false);
+
+  const pendingRequests = [
+    {
+      id: 1,
+      name: "Alex Johnson",
+      avatar: "A",
+      message: "I'd love to connect and discuss design projects together!",
+      timestamp: new Date("2024-01-16T14:20:00"),
+      fromMessage: "🎯 Freelance Graphic Designer Available - Creative Solutions for Your Brand",
+    },
+    {
+      id: 2,
+      name: "Sarah Chen",
+      avatar: "S",
+      message: "Your thoughts on creativity really resonated with me. Would love to continue our conversation!",
+      timestamp: new Date("2024-01-15T08:30:00"),
+      fromMessage: "Re: Thoughts on creativity and inspiration",
+    },
+  ];
 
   const connections = [
     {
@@ -76,6 +98,44 @@ export default function ConnectionsNew() {
     comm.name.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
+  const approveRequest = async (requestId: number) => {
+    const request = pendingRequests.find(req => req.id === requestId);
+    if (!request) return;
+
+    try {
+      // In a real app, this would call an API
+      // Send notification to the requester
+      await notifyConnectionAccepted(request.name, requestId.toString());
+
+      toast.success(`Connection with ${request.name} approved!`, {
+        description: "You can now chat in the normal chat screen",
+        duration: 4000,
+      });
+
+      // Remove from pending requests
+      // setPendingRequests(prev => prev.filter(req => req.id !== requestId));
+    } catch (error) {
+      console.error('Error approving connection:', error);
+      toast.error("Failed to approve connection", {
+        description: "Please try again",
+      });
+    }
+  };
+
+  const declineRequest = (requestId: number) => {
+    const request = pendingRequests.find(req => req.id === requestId);
+    if (!request) return;
+
+    // In a real app, this would call an API
+    toast.info(`Connection request from ${request.name} declined`, {
+      description: "The request has been removed",
+      duration: 3000,
+    });
+
+    // Remove from pending requests
+    // setPendingRequests(prev => prev.filter(req => req.id !== requestId));
+  };
+
   return (
     <LayoutNew>
       <div className="space-y-6">
@@ -135,6 +195,75 @@ export default function ConnectionsNew() {
             </div>
           </div>
         </div>
+
+        {/* Pending Connection Requests Alert */}
+        {pendingRequests.length > 0 && (
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                  <Users className="w-5 h-5 text-blue-600" />
+                </div>
+                <div>
+                  <h3 className="font-medium text-blue-900">
+                    {pendingRequests.length} Pending Connection Request{pendingRequests.length > 1 ? 's' : ''}
+                  </h3>
+                  <p className="text-sm text-blue-700">
+                    Review and respond to connection requests from other users
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setShowPendingRequests(!showPendingRequests)}
+                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+              >
+                {showPendingRequests ? 'Hide' : 'View'} Requests
+              </button>
+            </div>
+
+            {showPendingRequests && (
+              <div className="mt-4 space-y-3 border-t border-blue-200 pt-4">
+                {pendingRequests.map((request) => (
+                  <div key={request.id} className="bg-white rounded-lg p-4 border border-blue-100">
+                    <div className="flex items-start gap-4">
+                      <div className="w-12 h-12 bg-gradient-to-br from-purple-400 to-pink-500 rounded-full flex items-center justify-center text-white font-semibold">
+                        {request.avatar}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-1">
+                          <h4 className="font-semibold text-gray-900">{request.name}</h4>
+                          <span className="text-xs text-gray-500">
+                            {request.timestamp.toLocaleDateString()}
+                          </span>
+                        </div>
+                        <p className="text-sm text-gray-600 mb-2">
+                          From: "{request.fromMessage}"
+                        </p>
+                        <p className="text-sm text-gray-700 mb-3">
+                          {request.message}
+                        </p>
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => approveRequest(request.id)}
+                            className="bg-green-600 text-white px-4 py-1.5 rounded text-sm hover:bg-green-700 transition-colors"
+                          >
+                            Accept
+                          </button>
+                          <button
+                            onClick={() => declineRequest(request.id)}
+                            className="bg-gray-200 text-gray-700 px-4 py-1.5 rounded text-sm hover:bg-gray-300 transition-colors"
+                          >
+                            Decline
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Content */}
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">

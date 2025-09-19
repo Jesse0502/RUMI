@@ -1,7 +1,9 @@
 import LayoutNew from "@/components/LayoutNew";
 import { useState, useEffect, useRef } from "react";
+import { Sparkles, Upload, MapPin, User } from "lucide-react";
+import { debugError, getWebSocketEventInfo, getErrorInfo, getBrowserInfo } from "@/lib/debug";
 
-export default function Feed() {
+export default function AIMatch() {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<
     Array<{ id: number; text: string; isUser: boolean; timestamp: Date }>
@@ -10,80 +12,251 @@ export default function Feed() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const socketRef = useRef<WebSocket | null>(null);
   const [matches, setMatches] = useState<any[]>([]);
+  const [isOfflineMode, setIsOfflineMode] = useState(false);
 
   // Auto-scroll to bottom
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isTyping]);
 
-  // Connect WebSocket once
-  useEffect(() => {
-    const socket = new WebSocket("ws://localhost:8000/ws");
-    socketRef.current = socket;
+  // Helper function to get readable WebSocket ready state
+  const getReadyStateText = (readyState: number) => {
+    switch (readyState) {
+      case WebSocket.CONNECTING: return 'CONNECTING (0)';
+      case WebSocket.OPEN: return 'OPEN (1)';
+      case WebSocket.CLOSING: return 'CLOSING (2)';
+      case WebSocket.CLOSED: return 'CLOSED (3)';
+      default: return `UNKNOWN (${readyState})`;
+    }
+  };
 
-    socket.onopen = () => {
-      console.log("✅ Connected to WebSocket server");
-    };
+  // Helper function to get readable WebSocket close codes
+  const getCloseReasonText = (code: number) => {
+    switch (code) {
+      case 1000: return 'Normal closure';
+      case 1001: return 'Going away (page refresh/navigation)';
+      case 1002: return 'Protocol error';
+      case 1003: return 'Unsupported data type';
+      case 1005: return 'No status code';
+      case 1006: return 'Abnormal closure (connection lost)';
+      case 1007: return 'Invalid data';
+      case 1008: return 'Policy violation';
+      case 1009: return 'Message too big';
+      case 1010: return 'Extension required';
+      case 1011: return 'Internal server error';
+      case 1012: return 'Service restart';
+      case 1013: return 'Try again later';
+      case 1014: return 'Bad gateway';
+      case 1015: return 'TLS handshake failure';
+      default: return `Unknown code: ${code}`;
+    }
+  };
 
-    socket.onmessage = (event) => {
-      console.log(event.data);
-      const data = JSON.parse(event.data);
-      if (data.matches) {
-        setMatches(data.matches);
-        console.log("Received matches:", data.matches);
-      }
-      if (!data.reply) {
-        setIsTyping(false);
-        return;
-      }
-      console.log("Received AI reply:", data.reply);
-      // Add AI text reply
-      const aiMessage = {
-        id: Date.now(),
-        text: data.reply,
-        isUser: false,
-        timestamp: new Date(),
+  // Demo responses for offline mode
+  const getDemoResponse = (userMessage: string) => {
+    const lowerMessage = userMessage.toLowerCase();
+
+    if (lowerMessage.includes('designer') || lowerMessage.includes('design')) {
+      return {
+        reply: "I understand you're looking for a designer! Based on your description, I can help you find creative professionals. Let me show you some potential matches.",
+        matches: [
+          {
+            id: 1,
+            name: "Sarah Chen",
+            age: 28,
+            location: "Brooklyn, NY",
+            reason: "Experienced UX/UI designer with a passion for user-centered design and collaboration. Has worked with startups and loves creative projects.",
+            image: "https://images.unsplash.com/photo-1494790108755-2616b612b1e8?w=150&h=150&fit=crop&crop=face"
+          },
+          {
+            id: 2,
+            name: "Alex Rodriguez",
+            age: 32,
+            location: "San Francisco, CA",
+            reason: "Senior graphic designer specializing in brand identity and digital marketing. Known for clean, modern designs and meeting tight deadlines.",
+            image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face"
+          }
+        ]
       };
-      setMessages((prev) => [...prev, aiMessage]);
+    } else if (lowerMessage.includes('developer') || lowerMessage.includes('engineer')) {
+      return {
+        reply: "Great! You're looking for a developer. I can help you find talented engineers. Here are some matches based on your criteria.",
+        matches: [
+          {
+            id: 3,
+            name: "Maya Patel",
+            age: 26,
+            location: "Austin, TX",
+            reason: "Full-stack developer with React and Node.js expertise. Passionate about AI and building user-friendly applications.",
+            image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face"
+          }
+        ]
+      };
+    } else {
+      return {
+        reply: "I'd love to help you find the right person! Could you tell me more about what kind of professional or collaborator you're looking for? For example, their role, location, or specific skills?",
+        matches: []
+      };
+    }
+  };
 
-      // If matches exist → render them as one combined message
-      // if (data.matches && data.matches.length > 0) {
-      //   const matchText = data.matches
-      //     .map(
-      //       (m: any) =>
-      //         `⭐ ${m.name} (${m.age}, ${m.location})\nWhy: ${m.reason}`,
-      //     )
-      //     .join("\n\n");
+  // Detect environment and determine if WebSocket should be used
+  const isProduction = window.location.hostname !== 'localhost' && !window.location.hostname.includes('127.0.0.1');
+  const shouldUseWebSocket = !isProduction && (window.location.hostname === 'localhost' || window.location.hostname.includes('127.0.0.1'));
 
-      //   setMessages((prev) => [
-      //     ...prev,
-      //     {
-      //       id: Date.now() + 1,
-      //       text: `Here are some potential matches:\n\n${matchText}`,
-      //       isUser: false,
-      //       timestamp: new Date(),
-      //     },
-      //   ]);
-      // }
+  // Connect WebSocket with retry logic (only in development)
+  useEffect(() => {
+    // If in production or WebSocket shouldn't be used, go directly to demo mode
+    if (!shouldUseWebSocket) {
+      console.log("🔄 Running in production environment, using demo mode");
+      setIsOfflineMode(true);
+      return;
+    }
 
-      setIsTyping(false);
+    let reconnectTimeout: NodeJS.Timeout;
+    let reconnectAttempts = 0;
+    const maxReconnectAttempts = 3; // Reduced attempts for faster fallback
+
+    const connectWebSocket = () => {
+      try {
+        const socket = new WebSocket("ws://localhost:8000/ws");
+        socketRef.current = socket;
+
+        socket.onopen = () => {
+          console.log("✅ Connected to WebSocket server");
+          reconnectAttempts = 0; // Reset attempts on successful connection
+        };
+
+        socket.onmessage = (event) => {
+          try {
+            console.log("Received data:", event.data);
+            const data = JSON.parse(event.data);
+
+            if (data.matches) {
+              setMatches(data.matches);
+              console.log("Received matches:", data.matches);
+            }
+
+            if (!data.reply) {
+              setIsTyping(false);
+              return;
+            }
+
+            console.log("Received AI reply:", data.reply);
+            // Add AI text reply
+            const aiMessage = {
+              id: Date.now(),
+              text: data.reply,
+              isUser: false,
+              timestamp: new Date(),
+            };
+            setMessages((prev) => [...prev, aiMessage]);
+            setIsTyping(false);
+          } catch (parseError) {
+            debugError("❌ Error parsing WebSocket message:", {
+              error: getErrorInfo(parseError),
+              rawData: event.data,
+              dataType: typeof event.data,
+              dataLength: event.data?.length || 0,
+              browserInfo: getBrowserInfo()
+            });
+
+            // Add user-friendly error message
+            const errorMessage = {
+              id: Date.now(),
+              text: "❌ Received invalid response from AI service. Please try again.",
+              isUser: false,
+              timestamp: new Date(),
+            };
+            setMessages((prev) => [...prev, errorMessage]);
+            setIsTyping(false);
+          }
+        };
+
+        socket.onclose = (event) => {
+          const closeReason = getCloseReasonText(event.code);
+          console.log("❌ WebSocket closed:", {
+            code: event.code,
+            codeDescription: closeReason,
+            reason: event.reason || 'No reason provided',
+            wasClean: event.wasClean,
+            timestamp: new Date().toISOString(),
+            reconnectAttempts: reconnectAttempts,
+            maxAttempts: maxReconnectAttempts
+          });
+
+          // Attempt to reconnect if not manually closed and under retry limit
+          if (reconnectAttempts < maxReconnectAttempts && event.code !== 1000) {
+            reconnectAttempts++;
+            console.log(`🔄 Attempting to reconnect... (${reconnectAttempts}/${maxReconnectAttempts})`);
+            reconnectTimeout = setTimeout(connectWebSocket, 3000 * reconnectAttempts);
+          } else if (reconnectAttempts >= maxReconnectAttempts) {
+            console.error("❌ Max reconnection attempts reached. Please refresh the page.");
+          }
+        };
+
+        socket.onerror = (event) => {
+          debugError("⚠️ WebSocket error details:", {
+            ...getWebSocketEventInfo(event),
+            readyStateText: getReadyStateText(socket.readyState),
+            reconnectAttempts: reconnectAttempts,
+            maxAttempts: maxReconnectAttempts,
+            browserInfo: getBrowserInfo()
+          });
+
+          // Switch to offline mode after connection attempts
+          if (reconnectAttempts >= 2) {
+            setIsOfflineMode(true);
+            const offlineMessage = {
+              id: Date.now(),
+              text: "🔄 AI service unavailable. Running in demo mode with sample responses.",
+              isUser: false,
+              timestamp: new Date(),
+            };
+            setMessages((prev) => [...prev, offlineMessage]);
+          } else {
+            const errorMessage = {
+              id: Date.now(),
+              text: "❌ Connection error. Trying to reconnect...",
+              isUser: false,
+              timestamp: new Date(),
+            };
+            setMessages((prev) => [...prev, errorMessage]);
+          }
+          setIsTyping(false);
+        };
+
+      } catch (connectionError) {
+        debugError("❌ Failed to create WebSocket connection:", {
+          error: getErrorInfo(connectionError),
+          url: "ws://localhost:8000/ws",
+          reconnectAttempts: reconnectAttempts,
+          browserInfo: getBrowserInfo()
+        });
+
+        // Add user-friendly error message
+        const errorMessage = {
+          id: Date.now(),
+          text: `❌ Unable to connect to AI service. ${connectionError instanceof Error ? connectionError.message : 'Please make sure the server is running on port 8000.'}`,
+          isUser: false,
+          timestamp: new Date(),
+        };
+        setMessages((prev) => [...prev, errorMessage]);
+      }
     };
 
-    socket.onclose = () => {
-      console.log("❌ WebSocket closed");
-    };
-
-    socket.onerror = (err) => {
-      console.error("⚠️ WebSocket error:", err);
-    };
+    connectWebSocket();
 
     return () => {
-      socket.close();
+      clearTimeout(reconnectTimeout);
+      if (socketRef.current) {
+        socketRef.current.close(1000, "Component unmounting");
+      }
     };
-  }, []);
+  }, [shouldUseWebSocket]);
 
   const handleSendMessage = () => {
-    if (!message.trim() || !socketRef.current) return;
+    if (!message.trim()) return;
 
     const userMessage = {
       id: Date.now(),
@@ -95,10 +268,52 @@ export default function Feed() {
     // Show user message immediately
     setMessages((prev) => [...prev, userMessage]);
     setMessage("");
+
     setIsTyping(true);
 
-    // Send to WebSocket backend
-    socketRef.current.send(userMessage.text);
+    // Check WebSocket connection or use offline mode
+    if (isOfflineMode || !socketRef.current || socketRef.current.readyState !== WebSocket.OPEN) {
+      // Use demo responses in offline mode
+      setTimeout(() => {
+        const demoResponse = getDemoResponse(userMessage.text);
+
+        const aiMessage = {
+          id: Date.now() + 1,
+          text: demoResponse.reply,
+          isUser: false,
+          timestamp: new Date(),
+        };
+        setMessages((prev) => [...prev, aiMessage]);
+
+        if (demoResponse.matches.length > 0) {
+          setMatches(demoResponse.matches);
+        }
+
+        setIsTyping(false);
+      }, 1500); // Simulate AI thinking time
+      return;
+    }
+
+    try {
+      // Send to WebSocket backend
+      socketRef.current.send(userMessage.text);
+    } catch (sendError) {
+      debugError("❌ Error sending message:", {
+        error: getErrorInfo(sendError),
+        socketState: socketRef.current ? getReadyStateText(socketRef.current.readyState) : 'No socket',
+        messageLength: userMessage.text.length,
+        browserInfo: getBrowserInfo()
+      });
+
+      const errorMessage = {
+        id: Date.now() + 1,
+        text: `❌ Failed to send message. ${sendError instanceof Error ? sendError.message : 'Please try again.'}`,
+        isUser: false,
+        timestamp: new Date(),
+      };
+      setMessages((prev) => [...prev, errorMessage]);
+      setIsTyping(false);
+    }
   };
 
   return (
@@ -113,6 +328,12 @@ export default function Feed() {
             <p className="text-sm text-gray-500 mt-1">
               Describe the person you're looking for — AI will suggest matches.
             </p>
+            {isOfflineMode && (
+              <div className="mt-2 inline-flex items-center gap-2 bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-xs">
+                <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                {isProduction ? 'Demo Mode - Production Environment' : 'Demo Mode - AI service unavailable'}
+              </div>
+            )}
           </div>
         </header>
 
@@ -183,6 +404,22 @@ export default function Feed() {
                 </div>
               ))}
             </div>
+
+            {/* Typing indicator */}
+            {isTyping && (
+              <div className="flex justify-start">
+                <div className="px-4 py-2 rounded-lg bg-white border border-gray-200 text-gray-800 text-sm">
+                  <div className="inline-flex items-center gap-1">
+                    <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" />
+                    <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-150" />
+                    <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-300" />
+                    <span className="ml-2 text-xs text-gray-500">
+                      AI is typing…
+                    </span>
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* Typing indicator */}
             {isTyping && (
