@@ -1,6 +1,7 @@
 import LayoutNew from "@/components/LayoutNew";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { Upload, X, Image } from "lucide-react";
 
 export default function Events() {
   const navigate = useNavigate();
