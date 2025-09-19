@@ -441,8 +441,11 @@ export default function InboxNew() {
     setUploadedFiles([]);
     setShowComposeModal(false);
 
-    // Demo notification
-    alert("Letter composed! AI will analyze your content and send to matching recipients.");
+    // Show success notification
+    toast.success("Letter composed successfully!", {
+      description: "AI will analyze your content and send to matching recipients",
+      duration: 4000,
+    });
   };
 
   return (
