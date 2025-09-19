@@ -1,11 +1,74 @@
+const CACHE_NAME = "rumi-pwa-v1";
+const urlsToCache = [
+  "/",
+  "/inbox",
+  "/connections",
+  "/feed",
+  "/events",
+  "/profile",
+  "/manifest.json"
+];
+
 self.addEventListener("install", (event) => {
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then((cache) => {
+        console.log("[Service Worker] Caching app shell");
+        return cache.addAll(urlsToCache);
+      })
+      .catch((err) => {
+        console.error("[Service Worker] Caching failed:", err);
+      })
+  );
   self.skipWaiting();
   console.log("[Service Worker] Installed");
 });
 
 self.addEventListener("activate", (event) => {
+  event.waitUntil(
+    caches.keys().then((cacheNames) => {
+      return Promise.all(
+        cacheNames.map((cacheName) => {
+          if (cacheName !== CACHE_NAME) {
+            console.log("[Service Worker] Deleting old cache:", cacheName);
+            return caches.delete(cacheName);
+          }
+        })
+      );
+    })
+  );
   clients.claim();
   console.log("[Service Worker] Activated");
+});
+
+// Network-first strategy for API calls, cache-first for static assets
+self.addEventListener("fetch", (event) => {
+  if (event.request.url.includes("/api/")) {
+    // Network-first for API calls
+    event.respondWith(
+      fetch(event.request)
+        .then((response) => {
+          // Clone the response before caching
+          const responseClone = response.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, responseClone);
+          });
+          return response;
+        })
+        .catch(() => {
+          // Fallback to cache if network fails
+          return caches.match(event.request);
+        })
+    );
+  } else {
+    // Cache-first for static assets
+    event.respondWith(
+      caches.match(event.request)
+        .then((response) => {
+          return response || fetch(event.request);
+        })
+    );
+  }
 });
 
 self.addEventListener("push", function (event) {
