@@ -31,6 +31,26 @@ export default function LayoutNew({ children }: LayoutProps) {
   const solidColor = backgroundContext?.solidColor || "#f9fafb";
   const backgroundProps = getBackgroundClasses(backgroundType, solidColor);
 
+  // Check notification permission status on mount
+  useEffect(() => {
+    if ('Notification' in window) {
+      setNotifPermission(Notification.permission);
+
+      // Check if already subscribed
+      if ('serviceWorker' in navigator && Notification.permission === 'granted') {
+        navigator.serviceWorker.ready.then(reg => {
+          reg.pushManager.getSubscription().then(subscription => {
+            if (subscription) {
+              setNotifEnabled(true);
+            }
+          }).catch(error => {
+            console.warn('Error checking push subscription:', error);
+          });
+        });
+      }
+    }
+  }, []);
+
   const navigationItems = [
     {
       path: "/feed",
