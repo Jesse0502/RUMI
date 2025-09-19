@@ -318,7 +318,7 @@ export default function InboxNew() {
       case "amused":
         return "😊";
       case "nostalgic":
-        return "🌅";
+        return "��";
       case "friendly":
         return "👋";
       default:
@@ -989,11 +989,57 @@ export default function InboxNew() {
                   </div>
                 )}
 
+                {/* Inline Reply Compose */}
+                {isReplying && (
+                  <div className="border-t border-gray-200 pt-6">
+                    <div className="bg-gray-50 rounded-xl p-6 space-y-4">
+                      <div className="flex items-center gap-2 text-sm text-gray-600">
+                        <Reply className="w-4 h-4" />
+                        <span>Replying to {selectedMessage.from}</span>
+                      </div>
+
+                      <div>
+                        <textarea
+                          value={replyContent}
+                          onChange={(e) => setReplyContent(e.target.value)}
+                          placeholder="Write your reply..."
+                          rows={6}
+                          className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-300 resize-none bg-white"
+                        />
+                      </div>
+
+                      <div className="flex gap-3">
+                        <button
+                          onClick={sendReply}
+                          disabled={!replyContent.trim()}
+                          className="flex items-center gap-2 px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                        >
+                          <Send className="w-4 h-4" />
+                          Send Reply
+                        </button>
+                        <button
+                          onClick={toggleReply}
+                          className="px-6 py-2 border border-gray-200 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
                 {/* Action Buttons */}
                 <div className="flex gap-3 pt-4 border-t border-gray-200">
-                  <button className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-colors">
+                  <button
+                    onClick={toggleReply}
+                    className={`flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-xl transition-colors ${
+                      isReplying
+                        ? 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                        : 'bg-indigo-600 text-white hover:bg-indigo-700'
+                    }`}
+                  >
                     <Reply className="w-4 h-4" />
-                    Reply
+                    {isReplying ? 'Cancel Reply' : 'Reply'}
                   </button>
                   <button className="flex items-center justify-center gap-2 px-6 py-3 border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 transition-colors">
                     <Forward className="w-4 h-4" />
