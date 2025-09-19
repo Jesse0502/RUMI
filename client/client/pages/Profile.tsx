@@ -1,5 +1,4 @@
 import LayoutNew from "@/components/LayoutNew";
-import LayoutNew from "@/components/LayoutNew";
 import { Settings as SettingsIcon, BadgeCheck } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
