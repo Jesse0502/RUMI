@@ -413,6 +413,51 @@ export default function Events() {
                   className="w-full border rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-300 resize-none"
                 />
 
+                {/* Image Upload */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Event Image
+                  </label>
+                  <input
+                    ref={imageInputRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    className="hidden"
+                  />
+
+                  {!imagePreview ? (
+                    <button
+                      type="button"
+                      onClick={() => imageInputRef.current?.click()}
+                      className="w-full p-4 border-2 border-dashed border-gray-300 rounded-xl hover:border-indigo-400 hover:bg-indigo-50 transition-colors flex flex-col items-center gap-2"
+                    >
+                      <Upload className="w-6 h-6 text-gray-400" />
+                      <span className="text-sm text-gray-600">
+                        Upload event image
+                      </span>
+                      <span className="text-xs text-gray-500">
+                        JPG, PNG up to 5MB
+                      </span>
+                    </button>
+                  ) : (
+                    <div className="relative">
+                      <img
+                        src={imagePreview}
+                        alt="Event preview"
+                        className="w-full h-32 object-cover rounded-xl"
+                      />
+                      <button
+                        type="button"
+                        onClick={removeImage}
+                        className="absolute top-2 right-2 p-1 bg-white rounded-full shadow hover:bg-gray-100"
+                      >
+                        <X className="w-4 h-4 text-gray-500" />
+                      </button>
+                    </div>
+                  )}
+                </div>
+
                 <label className="flex items-center gap-3">
                   <input
                     type="checkbox"
