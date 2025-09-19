@@ -193,8 +193,10 @@ export default function InboxNew() {
 
     setIsLoading(true);
     setTimeout(() => {
-      const newLetters = generateMoreLetters(allLetters.length + 1, 10);
-      setAllLetters(prev => [...prev, ...newLetters]);
+      setAllLetters(prev => {
+        const newLetters = generateMoreLetters(prev.length + 1, 10);
+        return [...prev, ...newLetters];
+      });
       setPage(prev => prev + 1);
       setIsLoading(false);
 
