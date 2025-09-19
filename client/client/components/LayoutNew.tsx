@@ -9,7 +9,7 @@ import {
   Calendar,
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   useBackground,
   getBackgroundClasses,
