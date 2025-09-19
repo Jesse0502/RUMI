@@ -203,12 +203,22 @@ export default function AIMatch() {
         };
 
       } catch (connectionError) {
-        console.error("❌ Failed to create WebSocket connection:", connectionError);
+        console.error("❌ Failed to create WebSocket connection:", {
+          error: connectionError instanceof Error ? {
+            name: connectionError.name,
+            message: connectionError.message,
+            stack: connectionError.stack
+          } : connectionError,
+          url: "ws://localhost:8000/ws",
+          timestamp: new Date().toISOString(),
+          userAgent: navigator.userAgent,
+          reconnectAttempts: reconnectAttempts
+        });
 
         // Add user-friendly error message
         const errorMessage = {
           id: Date.now(),
-          text: "❌ Unable to connect to AI service. Please make sure the server is running on port 8000.",
+          text: `❌ Unable to connect to AI service. ${connectionError instanceof Error ? connectionError.message : 'Please make sure the server is running on port 8000.'}`,
           isUser: false,
           timestamp: new Date(),
         };
