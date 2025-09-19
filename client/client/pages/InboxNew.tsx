@@ -48,105 +48,62 @@ export default function InboxNew() {
   const bottomRef = useRef<HTMLDivElement>(null);
   const nextIdRef = useRef(9); // Start from 9 since initial letters use IDs 1-8
 
-  // Generate initial letters
+  // Generate initial letters with conversation threads
   const initialLetters = [
     {
       id: 1,
       from: "Sarah Chen",
       avatar: "S",
-      subject: "Thank you for your beautiful letter about morning walks",
-      preview:
-        "Your words about finding peace in the early hours really resonated with me. I wanted to share my own experience...",
+      subject: "Re: Thoughts on creativity and inspiration",
+      preview: "I loved reading about your creative process! It reminded me of something Maya Angelou once said about inspiration...",
       timestamp: new Date("2024-01-15T08:30:00"),
       isRead: false,
       isStarred: true,
       hasAttachment: false,
-      category: "personal",
-      mood: "grateful",
-      replyCount: 0,
-    },
-    {
-      id: 2,
-      from: "John Jacobs",
-      avatar: "J",
-      subject: "Re: Thoughts on creativity and inspiration",
-      preview:
-        "I loved reading about your creative process! It reminded me of something Maya Angelou once said about inspiration...",
-      timestamp: new Date("2024-01-14T15:45:00"),
-      isRead: true,
-      isStarred: false,
-      hasAttachment: true,
       category: "creative",
       mood: "inspired",
       replyCount: 3,
+      conversation: [
+        {
+          id: "1-1",
+          from: "You",
+          avatar: "Y",
+          content: "I've been thinking a lot about creativity lately. There's something magical about that moment when inspiration strikes - it's like the universe is whispering secrets directly into your soul. I find that my best ideas come when I'm not actively searching for them, but when I'm in a state of quiet receptivity.",
+          timestamp: new Date("2024-01-13T10:00:00"),
+          isFromMe: true,
+        },
+        {
+          id: "1-2",
+          from: "Sarah Chen",
+          avatar: "S",
+          content: "I loved reading about your creative process! It reminded me of something Maya Angelou once said about inspiration - that it comes like a whisper, and we must be still enough to hear it. Your words about quiet receptivity really resonated with me.\n\nI've noticed that my own creative breakthroughs happen in the most unexpected moments - while washing dishes, walking in nature, or just before falling asleep. There's something about letting go of the need to control the process that opens up new possibilities.",
+          timestamp: new Date("2024-01-14T15:45:00"),
+          isFromMe: false,
+        },
+        {
+          id: "1-3",
+          from: "You",
+          avatar: "Y",
+          content: "That Maya Angelou quote is perfect! It's exactly what I was trying to articulate. I love how you mentioned those in-between moments - the dishes, the walks, the drowsy edge of sleep. It's like creativity lives in the margins of our daily lives, waiting for us to notice.",
+          timestamp: new Date("2024-01-14T18:20:00"),
+          isFromMe: true,
+        },
+        {
+          id: "1-4",
+          from: "Sarah Chen",
+          avatar: "S",
+          content: "Yes! The margins - what a beautiful way to put it. I think that's why so many artists talk about the importance of boredom and daydreaming. We live in such a stimulated world that we rarely give ourselves permission to just... exist in those quiet spaces where creativity can bloom.",
+          timestamp: new Date("2024-01-15T08:30:00"),
+          isFromMe: false,
+        },
+      ]
     },
     {
-      id: 3,
-      from: "Anonymous Writer",
-      avatar: "?",
-      subject: "Your letter touched my heart",
-      preview:
-        "I don't usually reach out to strangers, but your letter about overcoming challenges gave me hope during a difficult time...",
-      timestamp: new Date("2024-01-14T10:20:00"),
-      isRead: true,
-      isStarred: true,
-      hasAttachment: false,
-      category: "support",
-      mood: "hopeful",
-      replyCount: 1,
-    },
-    {
-      id: 4,
-      from: "Marcus Rivera",
-      avatar: "M",
-      subject: "Coffee shop observations - so relatable!",
-      preview:
-        "I was sitting in a café when I read your letter, and I couldn't help but smile at how perfectly you captured...",
-      timestamp: new Date("2024-01-13T19:15:00"),
-      isRead: false,
-      isStarred: false,
-      hasAttachment: false,
-      category: "observation",
-      mood: "amused",
-      replyCount: 0,
-    },
-    {
-      id: 5,
-      from: "Emma Thompson",
-      avatar: "E",
-      subject: "Childhood memories that shape us",
-      preview:
-        "Your story about that summer when you were eight brought back so many memories of my own childhood adventures...",
-      timestamp: new Date("2024-01-12T14:30:00"),
-      isRead: true,
-      isStarred: false,
-      hasAttachment: true,
-      category: "memory",
-      mood: "nostalgic",
-      replyCount: 2,
-    },
-    {
-      id: 6,
-      from: "David Park",
-      avatar: "D",
-      subject: "Letter exchange invitation",
-      preview:
-        "Hi! I came across your profile and really enjoyed your writing style. Would you be interested in becoming pen pals?",
-      timestamp: new Date("2024-01-11T09:45:00"),
-      isRead: false,
-      isStarred: false,
-      hasAttachment: false,
-      category: "invitation",
-      mood: "friendly",
-      replyCount: 0,
-    },
-    {
-      id: 7,
+      id: 2,
       from: "Alex Johnson",
       avatar: "A",
       subject: "🎯 Freelance Graphic Designer Available - Creative Solutions for Your Brand",
-      preview:
-        "Hi! I'm Alex, a passionate graphic designer with 5+ years of experience in brand identity, web design, and digital marketing. I specialize in creating modern, clean designs that tell your story...",
+      preview: "Hi! I'm Alex, a passionate graphic designer with 5+ years of experience in brand identity, web design, and digital marketing...",
       timestamp: new Date("2024-01-16T14:20:00"),
       isRead: false,
       isStarred: false,
@@ -154,21 +111,40 @@ export default function InboxNew() {
       category: "business",
       mood: "professional",
       replyCount: 0,
+      conversation: [
+        {
+          id: "2-1",
+          from: "Alex Johnson",
+          avatar: "A",
+          content: "Hi! I'm Alex, a passionate graphic designer with 5+ years of experience in brand identity, web design, and digital marketing. I specialize in creating modern, clean designs that tell your story and connect with your audience.\n\n🎨 What I offer:\n• Logo design & brand identity\n• Website design & development\n• Social media graphics\n• Print design (brochures, business cards, etc.)\n• UI/UX design\n\n💼 Recent projects include work for tech startups, local businesses, and creative agencies. I pride myself on delivering high-quality work on time and within budget.\n\nI'd love to learn more about your project and how I can help bring your vision to life. My rates are competitive and I offer package deals for comprehensive branding projects.\n\nFeel free to check out my portfolio at alexjohnsondesign.com or reach out if you'd like to discuss your needs!\n\nBest regards,\nAlex Johnson\nFreelance Graphic Designer\nalex@alexjohnsondesign.com\n(555) 123-4567",
+          timestamp: new Date("2024-01-16T14:20:00"),
+          isFromMe: false,
+        }
+      ]
     },
     {
-      id: 8,
-      from: "Maya Patel",
-      avatar: "M",
-      subject: "Seeking Technical Co-founder for Revolutionary EdTech Startup",
-      preview:
-        "I'm building an AI-powered personalized learning platform that adapts to each student's learning style. After 2 years of market research and securing initial funding, I'm looking for a technical co-founder with React/Node.js experience...",
-      timestamp: new Date("2024-01-16T11:30:00"),
-      isRead: false,
+      id: 3,
+      from: "Anonymous Writer",
+      avatar: "?",
+      subject: "Your letter touched my heart",
+      preview: "I don't usually reach out to strangers, but your letter about overcoming challenges gave me hope during a difficult time...",
+      timestamp: new Date("2024-01-14T10:20:00"),
+      isRead: true,
       isStarred: true,
-      hasAttachment: true,
-      category: "startup",
-      mood: "excited",
-      replyCount: 2,
+      hasAttachment: false,
+      category: "support",
+      mood: "hopeful",
+      replyCount: 0,
+      conversation: [
+        {
+          id: "3-1",
+          from: "Anonymous Writer",
+          avatar: "?",
+          content: "I don't usually reach out to strangers, but your letter about overcoming challenges gave me hope during a difficult time in my life.\n\nI've been struggling with some personal setbacks recently, and your words about finding strength in vulnerability really spoke to me. There's something powerful about sharing our stories - it reminds us that we're not alone in our struggles.\n\nYour perspective on how challenges can become catalysts for growth has given me a new way to look at my current situation. Instead of seeing my difficulties as roadblocks, I'm trying to view them as opportunities for transformation.\n\nThank you for having the courage to share your story. It means more than you know.\n\nWith gratitude,\nA fellow traveler on this journey",
+          timestamp: new Date("2024-01-14T10:20:00"),
+          isFromMe: false,
+        }
+      ]
     },
   ];
 
@@ -318,7 +294,7 @@ export default function InboxNew() {
       case "amused":
         return "😊";
       case "nostalgic":
-        return "��";
+        return "🌅";
       case "friendly":
         return "👋";
       default:
