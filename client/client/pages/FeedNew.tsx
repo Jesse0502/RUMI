@@ -189,15 +189,12 @@ export default function AIMatch() {
         };
 
         socket.onerror = (event) => {
-          console.error("⚠️ WebSocket error details:", {
-            type: event.type,
-            target: event.target?.constructor?.name || 'WebSocket',
-            readyState: socket.readyState,
+          debugError("⚠️ WebSocket error details:", {
+            ...getWebSocketEventInfo(event),
             readyStateText: getReadyStateText(socket.readyState),
-            url: socket.url,
-            timestamp: new Date().toISOString(),
             reconnectAttempts: reconnectAttempts,
-            maxAttempts: maxReconnectAttempts
+            maxAttempts: maxReconnectAttempts,
+            browserInfo: getBrowserInfo()
           });
 
           // Switch to offline mode after connection attempts
