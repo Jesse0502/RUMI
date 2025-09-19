@@ -154,7 +154,7 @@ export default function InboxNew() {
   }, []);
 
   // Generate more letters for pagination
-  const generateMoreLetters = (startId: number, count: number) => {
+  const generateMoreLetters = (count: number) => {
     const names = ["Alex Johnson", "Maria Garcia", "David Kim", "Sophie Brown", "James Wilson", "Elena Rodriguez", "Michael Zhang", "Isabella Chen"];
     const subjects = [
       "Re: Your thoughts on remote work",
@@ -168,7 +168,7 @@ export default function InboxNew() {
     ];
 
     return Array.from({ length: count }, (_, i) => {
-      const id = startId + i;
+      const id = nextIdRef.current + i;
       const name = names[id % names.length];
       const subject = subjects[id % subjects.length];
       return {
