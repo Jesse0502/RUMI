@@ -1,15 +1,16 @@
 import LayoutNew from "@/components/LayoutNew";
 import { useState } from "react";
 import { Bell, Send, Users, Mail, Calendar } from "lucide-react";
-import { 
-  sendPushNotification, 
-  notifyNewMessage, 
-  notifyConnectionRequest, 
+import {
+  sendPushNotification,
+  notifyNewMessage,
+  notifyConnectionRequest,
   notifyConnectionAccepted,
   notifyAIMatch,
   notifyEventReminder,
-  checkNotificationSupport 
+  checkNotificationSupport
 } from "@/lib/notifications";
+import { runWebSocketDiagnostics } from "@/lib/websocket-test";
 import { toast } from "sonner";
 
 export default function TestNotifications() {
