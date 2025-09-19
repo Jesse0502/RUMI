@@ -925,27 +925,50 @@ export default function InboxNew() {
                   </div>
                 </div>
 
-                {/* Message Content */}
-                <div className="prose prose-gray max-w-none">
-                  <div className="bg-gray-50 rounded-xl p-6">
-                    <p className="text-gray-800 leading-relaxed whitespace-pre-wrap text-base">
-                      {selectedMessage.preview}
+                {/* Conversation Thread */}
+                <div className="space-y-6">
+                  {selectedMessage.conversation?.map((message: any, index: number) => (
+                    <div key={message.id} className={`flex gap-4 ${message.isFromMe ? 'flex-row-reverse' : ''}`}>
+                      {/* Avatar */}
+                      <div className="flex-shrink-0">
+                        <div
+                          className={`w-10 h-10 bg-gradient-to-br ${
+                            message.isFromMe
+                              ? 'from-indigo-400 to-purple-500'
+                              : getAvatarColor(message.from)
+                          } rounded-full flex items-center justify-center text-white font-semibold text-sm`}
+                        >
+                          {message.avatar}
+                        </div>
+                      </div>
 
-                      {/* Extended content for demo purposes */}
-                      {"\n\n"}I hope this message finds you well. I wanted to reach out because your recent writings have really resonated with me, and I felt compelled to share my thoughts and experiences with you.
+                      {/* Message */}
+                      <div className={`flex-1 max-w-[80%] ${message.isFromMe ? 'text-right' : ''}`}>
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className={`text-sm font-medium text-gray-900 ${message.isFromMe ? 'order-2' : ''}`}>
+                            {message.from}
+                          </span>
+                          <span className={`text-xs text-gray-500 ${message.isFromMe ? 'order-1' : ''}`}>
+                            {formatTimestamp(message.timestamp)}
+                          </span>
+                        </div>
 
-                      {"\n\n"}There's something beautiful about connecting with someone through words, especially when those words touch something deep within us. Your perspective on life, creativity, and human connection has given me a lot to think about.
-
-                      {"\n\n"}I've been meaning to write to you for a while now, but I kept putting it off, thinking maybe my thoughts weren't interesting enough or well-formed enough to share. But I realized that's exactly the kind of thinking that prevents us from making meaningful connections.
-
-                      {"\n\n"}Thank you for sharing your authentic voice with the world. It makes a difference to people like me who are also trying to navigate this complex, beautiful journey we call life.
-
-                      {"\n\n"}I'd love to hear your thoughts on this, and if you're open to it, perhaps we could continue this conversation.
-
-                      {"\n\n"}With warmth and appreciation,
-                      {"\n"}{selectedMessage.from}
-                    </p>
-                  </div>
+                        <div
+                          className={`prose prose-sm max-w-none p-4 rounded-xl ${
+                            message.isFromMe
+                              ? 'bg-indigo-600 text-white rounded-br-md'
+                              : 'bg-gray-50 text-gray-800 rounded-bl-md'
+                          }`}
+                        >
+                          <p className={`whitespace-pre-wrap leading-relaxed m-0 ${
+                            message.isFromMe ? 'text-white' : 'text-gray-800'
+                          }`}>
+                            {message.content}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
 
                 {/* Attachments (Demo) */}
