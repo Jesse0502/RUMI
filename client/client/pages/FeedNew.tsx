@@ -142,16 +142,12 @@ export default function AIMatch() {
             setMessages((prev) => [...prev, aiMessage]);
             setIsTyping(false);
           } catch (parseError) {
-            console.error("❌ Error parsing WebSocket message:", {
-              error: parseError instanceof Error ? {
-                name: parseError.name,
-                message: parseError.message,
-                stack: parseError.stack
-              } : parseError,
+            debugError("❌ Error parsing WebSocket message:", {
+              error: getErrorInfo(parseError),
               rawData: event.data,
               dataType: typeof event.data,
               dataLength: event.data?.length || 0,
-              timestamp: new Date().toISOString()
+              browserInfo: getBrowserInfo()
             });
 
             // Add user-friendly error message
