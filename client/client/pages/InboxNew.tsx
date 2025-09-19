@@ -418,7 +418,7 @@ export default function InboxNew() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="card-elevated p-4 text-center">
             <div className="text-2xl font-bold text-blue-600 mb-1">
-              {letters.length}
+              {allLetters.length}
             </div>
             <div className="text-sm text-gray-600">Total Messages</div>
           </div>
@@ -439,7 +439,7 @@ export default function InboxNew() {
 
           <div className="card-elevated p-4 text-center">
             <div className="text-2xl font-bold text-green-600 mb-1">
-              {letters.reduce((sum, l) => sum + l.replyCount, 0)}
+              {allLetters.reduce((sum, l) => sum + l.replyCount, 0)}
             </div>
             <div className="text-sm text-gray-600">Total Replies</div>
           </div>
