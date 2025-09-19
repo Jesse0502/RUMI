@@ -385,6 +385,41 @@ export default function InboxNew() {
   const closeMessageModal = () => {
     setSelectedMessage(null);
     setIsMessageModalOpen(false);
+    setIsReplying(false);
+    setReplyContent("");
+  };
+
+  const toggleReply = () => {
+    setIsReplying(!isReplying);
+    if (isReplying) {
+      setReplyContent("");
+    }
+  };
+
+  const sendReply = () => {
+    if (!replyContent.trim()) return;
+
+    // Update reply count for the message
+    setAllLetters(prev =>
+      prev.map(l =>
+        l.id === selectedMessage.id
+          ? { ...l, replyCount: l.replyCount + 1 }
+          : l
+      )
+    );
+
+    // Update selected message
+    setSelectedMessage(prev => ({
+      ...prev,
+      replyCount: prev.replyCount + 1
+    }));
+
+    // Reset reply state
+    setIsReplying(false);
+    setReplyContent("");
+
+    // Demo notification
+    alert(`Reply sent to ${selectedMessage.from}!`);
   };
 
   const composeLetter = () => {
