@@ -198,19 +198,30 @@ export default function AIMatch() {
     setMessages((prev) => [...prev, userMessage]);
     setMessage("");
 
-    // Check WebSocket connection
-    if (!socketRef.current || socketRef.current.readyState !== WebSocket.OPEN) {
-      const errorMessage = {
-        id: Date.now() + 1,
-        text: "❌ Not connected to AI service. Please wait for reconnection or refresh the page.",
-        isUser: false,
-        timestamp: new Date(),
-      };
-      setMessages((prev) => [...prev, errorMessage]);
+    setIsTyping(true);
+
+    // Check WebSocket connection or use offline mode
+    if (isOfflineMode || !socketRef.current || socketRef.current.readyState !== WebSocket.OPEN) {
+      // Use demo responses in offline mode
+      setTimeout(() => {
+        const demoResponse = getDemoResponse(userMessage.text);
+
+        const aiMessage = {
+          id: Date.now() + 1,
+          text: demoResponse.reply,
+          isUser: false,
+          timestamp: new Date(),
+        };
+        setMessages((prev) => [...prev, aiMessage]);
+
+        if (demoResponse.matches.length > 0) {
+          setMatches(demoResponse.matches);
+        }
+
+        setIsTyping(false);
+      }, 1500); // Simulate AI thinking time
       return;
     }
-
-    setIsTyping(true);
 
     try {
       // Send to WebSocket backend
