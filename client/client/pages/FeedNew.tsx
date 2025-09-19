@@ -141,7 +141,26 @@ export default function AIMatch() {
             setMessages((prev) => [...prev, aiMessage]);
             setIsTyping(false);
           } catch (parseError) {
-            console.error("Error parsing WebSocket message:", parseError);
+            console.error("❌ Error parsing WebSocket message:", {
+              error: parseError instanceof Error ? {
+                name: parseError.name,
+                message: parseError.message,
+                stack: parseError.stack
+              } : parseError,
+              rawData: event.data,
+              dataType: typeof event.data,
+              dataLength: event.data?.length || 0,
+              timestamp: new Date().toISOString()
+            });
+
+            // Add user-friendly error message
+            const errorMessage = {
+              id: Date.now(),
+              text: "❌ Received invalid response from AI service. Please try again.",
+              isUser: false,
+              timestamp: new Date(),
+            };
+            setMessages((prev) => [...prev, errorMessage]);
             setIsTyping(false);
           }
         };
