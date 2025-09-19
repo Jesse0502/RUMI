@@ -18,6 +18,17 @@ export default function AIMatch() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isTyping]);
 
+  // Helper function to get readable WebSocket ready state
+  const getReadyStateText = (readyState: number) => {
+    switch (readyState) {
+      case WebSocket.CONNECTING: return 'CONNECTING (0)';
+      case WebSocket.OPEN: return 'OPEN (1)';
+      case WebSocket.CLOSING: return 'CLOSING (2)';
+      case WebSocket.CLOSED: return 'CLOSED (3)';
+      default: return `UNKNOWN (${readyState})`;
+    }
+  };
+
   // Demo responses for offline mode
   const getDemoResponse = (userMessage: string) => {
     const lowerMessage = userMessage.toLowerCase();
