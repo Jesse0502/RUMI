@@ -18,6 +18,7 @@ import Events from "./pages/Events";
 import ChatNew from "./pages/ChatNew";
 import NotFound from "./pages/NotFound";
 import Home from "./pages/Home";
+import Settings from "./pages/Settings";
 
 const queryClient = new QueryClient();
 
