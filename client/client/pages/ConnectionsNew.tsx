@@ -6,6 +6,26 @@ import { useState } from "react";
 export default function ConnectionsNew() {
   const [activeTab, setActiveTab] = useState("chats");
   const [searchQuery, setSearchQuery] = useState("");
+  const [showPendingRequests, setShowPendingRequests] = useState(false);
+
+  const pendingRequests = [
+    {
+      id: 1,
+      name: "Alex Johnson",
+      avatar: "A",
+      message: "I'd love to connect and discuss design projects together!",
+      timestamp: new Date("2024-01-16T14:20:00"),
+      fromMessage: "🎯 Freelance Graphic Designer Available - Creative Solutions for Your Brand",
+    },
+    {
+      id: 2,
+      name: "Sarah Chen",
+      avatar: "S",
+      message: "Your thoughts on creativity really resonated with me. Would love to continue our conversation!",
+      timestamp: new Date("2024-01-15T08:30:00"),
+      fromMessage: "Re: Thoughts on creativity and inspiration",
+    },
+  ];
 
   const connections = [
     {
