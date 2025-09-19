@@ -12,8 +12,15 @@ import {
   Reply,
   Forward,
   Archive,
+  Edit3,
+  Upload,
+  X,
+  Paperclip,
+  Send,
+  FileText,
+  Image,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Link } from "react-router-dom";
 
 export default function InboxNew() {
