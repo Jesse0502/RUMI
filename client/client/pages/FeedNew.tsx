@@ -125,7 +125,7 @@ export default function AIMatch() {
   }, []);
 
   const handleSendMessage = () => {
-    if (!message.trim() || !socketRef.current) return;
+    if (!message.trim()) return;
 
     const userMessage = {
       id: Date.now(),
@@ -137,10 +137,35 @@ export default function AIMatch() {
     // Show user message immediately
     setMessages((prev) => [...prev, userMessage]);
     setMessage("");
+
+    // Check WebSocket connection
+    if (!socketRef.current || socketRef.current.readyState !== WebSocket.OPEN) {
+      const errorMessage = {
+        id: Date.now() + 1,
+        text: "❌ Not connected to AI service. Please wait for reconnection or refresh the page.",
+        isUser: false,
+        timestamp: new Date(),
+      };
+      setMessages((prev) => [...prev, errorMessage]);
+      return;
+    }
+
     setIsTyping(true);
 
-    // Send to WebSocket backend
-    socketRef.current.send(userMessage.text);
+    try {
+      // Send to WebSocket backend
+      socketRef.current.send(userMessage.text);
+    } catch (sendError) {
+      console.error("❌ Error sending message:", sendError);
+      const errorMessage = {
+        id: Date.now() + 1,
+        text: "❌ Failed to send message. Please try again.",
+        isUser: false,
+        timestamp: new Date(),
+      };
+      setMessages((prev) => [...prev, errorMessage]);
+      setIsTyping(false);
+    }
   };
 
   return (
