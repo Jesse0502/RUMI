@@ -136,6 +136,36 @@ export default function InboxNew() {
       mood: "friendly",
       replyCount: 0,
     },
+    {
+      id: 7,
+      from: "Alex Johnson",
+      avatar: "A",
+      subject: "🎯 Freelance Graphic Designer Available - Creative Solutions for Your Brand",
+      preview:
+        "Hi! I'm Alex, a passionate graphic designer with 5+ years of experience in brand identity, web design, and digital marketing. I specialize in creating modern, clean designs that tell your story...",
+      timestamp: new Date("2024-01-16T14:20:00"),
+      isRead: false,
+      isStarred: false,
+      hasAttachment: true,
+      category: "business",
+      mood: "professional",
+      replyCount: 0,
+    },
+    {
+      id: 8,
+      from: "Maya Patel",
+      avatar: "M",
+      subject: "Seeking Technical Co-founder for Revolutionary EdTech Startup",
+      preview:
+        "I'm building an AI-powered personalized learning platform that adapts to each student's learning style. After 2 years of market research and securing initial funding, I'm looking for a technical co-founder with React/Node.js experience...",
+      timestamp: new Date("2024-01-16T11:30:00"),
+      isRead: false,
+      isStarred: true,
+      hasAttachment: true,
+      category: "startup",
+      mood: "excited",
+      replyCount: 2,
+    },
   ];
 
   const filterOptions = [
