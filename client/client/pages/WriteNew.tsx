@@ -1,4 +1,4 @@
-import LayoutNew from "@/components/LayoutNew";
+import LayoutNew from "@/components/common/LayoutNew";
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Send, Paperclip, Sparkles, Eye, EyeOff, Save } from "lucide-react";

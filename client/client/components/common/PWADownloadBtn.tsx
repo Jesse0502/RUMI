@@ -6,8 +6,7 @@ const PWADownloadBtn = () => {
   const [showButton, setShowButton] = useState(false);
 
   useEffect(() => {
-    // @ts-ignore
-    const handler = (e) => {
+    const handler = (e: any) => {
       e.preventDefault();
       setDeferredPrompt(e);
       setShowButton(true);

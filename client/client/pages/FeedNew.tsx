@@ -1,7 +1,12 @@
-import LayoutNew from "@/components/LayoutNew";
+import LayoutNew from "@/components/common/LayoutNew";
 import { useState, useEffect, useRef } from "react";
 import { Sparkles, Upload, MapPin, User } from "lucide-react";
-import { debugError, getWebSocketEventInfo, getErrorInfo, getBrowserInfo } from "@/lib/debug";
+import {
+  debugError,
+  getWebSocketEventInfo,
+  getErrorInfo,
+  getBrowserInfo,
+} from "@/lib/debug";
 
 export default function AIMatch() {
   const [message, setMessage] = useState("");
@@ -22,33 +27,54 @@ export default function AIMatch() {
   // Helper function to get readable WebSocket ready state
   const getReadyStateText = (readyState: number) => {
     switch (readyState) {
-      case WebSocket.CONNECTING: return 'CONNECTING (0)';
-      case WebSocket.OPEN: return 'OPEN (1)';
-      case WebSocket.CLOSING: return 'CLOSING (2)';
-      case WebSocket.CLOSED: return 'CLOSED (3)';
-      default: return `UNKNOWN (${readyState})`;
+      case WebSocket.CONNECTING:
+        return "CONNECTING (0)";
+      case WebSocket.OPEN:
+        return "OPEN (1)";
+      case WebSocket.CLOSING:
+        return "CLOSING (2)";
+      case WebSocket.CLOSED:
+        return "CLOSED (3)";
+      default:
+        return `UNKNOWN (${readyState})`;
     }
   };
 
   // Helper function to get readable WebSocket close codes
   const getCloseReasonText = (code: number) => {
     switch (code) {
-      case 1000: return 'Normal closure';
-      case 1001: return 'Going away (page refresh/navigation)';
-      case 1002: return 'Protocol error';
-      case 1003: return 'Unsupported data type';
-      case 1005: return 'No status code';
-      case 1006: return 'Abnormal closure (connection lost)';
-      case 1007: return 'Invalid data';
-      case 1008: return 'Policy violation';
-      case 1009: return 'Message too big';
-      case 1010: return 'Extension required';
-      case 1011: return 'Internal server error';
-      case 1012: return 'Service restart';
-      case 1013: return 'Try again later';
-      case 1014: return 'Bad gateway';
-      case 1015: return 'TLS handshake failure';
-      default: return `Unknown code: ${code}`;
+      case 1000:
+        return "Normal closure";
+      case 1001:
+        return "Going away (page refresh/navigation)";
+      case 1002:
+        return "Protocol error";
+      case 1003:
+        return "Unsupported data type";
+      case 1005:
+        return "No status code";
+      case 1006:
+        return "Abnormal closure (connection lost)";
+      case 1007:
+        return "Invalid data";
+      case 1008:
+        return "Policy violation";
+      case 1009:
+        return "Message too big";
+      case 1010:
+        return "Extension required";
+      case 1011:
+        return "Internal server error";
+      case 1012:
+        return "Service restart";
+      case 1013:
+        return "Try again later";
+      case 1014:
+        return "Bad gateway";
+      case 1015:
+        return "TLS handshake failure";
+      default:
+        return `Unknown code: ${code}`;
     }
   };
 
@@ -56,53 +82,70 @@ export default function AIMatch() {
   const getDemoResponse = (userMessage: string) => {
     const lowerMessage = userMessage.toLowerCase();
 
-    if (lowerMessage.includes('designer') || lowerMessage.includes('design')) {
+    if (lowerMessage.includes("designer") || lowerMessage.includes("design")) {
       return {
-        reply: "I understand you're looking for a designer! Based on your description, I can help you find creative professionals. Let me show you some potential matches.",
+        reply:
+          "I understand you're looking for a designer! Based on your description, I can help you find creative professionals. Let me show you some potential matches.",
         matches: [
           {
             id: 1,
             name: "Sarah Chen",
             age: 28,
             location: "Brooklyn, NY",
-            reason: "Experienced UX/UI designer with a passion for user-centered design and collaboration. Has worked with startups and loves creative projects.",
-            image: "https://images.unsplash.com/photo-1494790108755-2616b612b1e8?w=150&h=150&fit=crop&crop=face"
+            reason:
+              "Experienced UX/UI designer with a passion for user-centered design and collaboration. Has worked with startups and loves creative projects.",
+            image:
+              "https://images.unsplash.com/photo-1494790108755-2616b612b1e8?w=150&h=150&fit=crop&crop=face",
           },
           {
             id: 2,
             name: "Alex Rodriguez",
             age: 32,
             location: "San Francisco, CA",
-            reason: "Senior graphic designer specializing in brand identity and digital marketing. Known for clean, modern designs and meeting tight deadlines.",
-            image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face"
-          }
-        ]
+            reason:
+              "Senior graphic designer specializing in brand identity and digital marketing. Known for clean, modern designs and meeting tight deadlines.",
+            image:
+              "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
+          },
+        ],
       };
-    } else if (lowerMessage.includes('developer') || lowerMessage.includes('engineer')) {
+    } else if (
+      lowerMessage.includes("developer") ||
+      lowerMessage.includes("engineer")
+    ) {
       return {
-        reply: "Great! You're looking for a developer. I can help you find talented engineers. Here are some matches based on your criteria.",
+        reply:
+          "Great! You're looking for a developer. I can help you find talented engineers. Here are some matches based on your criteria.",
         matches: [
           {
             id: 3,
             name: "Maya Patel",
             age: 26,
             location: "Austin, TX",
-            reason: "Full-stack developer with React and Node.js expertise. Passionate about AI and building user-friendly applications.",
-            image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face"
-          }
-        ]
+            reason:
+              "Full-stack developer with React and Node.js expertise. Passionate about AI and building user-friendly applications.",
+            image:
+              "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
+          },
+        ],
       };
     } else {
       return {
-        reply: "I'd love to help you find the right person! Could you tell me more about what kind of professional or collaborator you're looking for? For example, their role, location, or specific skills?",
-        matches: []
+        reply:
+          "I'd love to help you find the right person! Could you tell me more about what kind of professional or collaborator you're looking for? For example, their role, location, or specific skills?",
+        matches: [],
       };
     }
   };
 
   // Detect environment and determine if WebSocket should be used
-  const isProduction = window.location.hostname !== 'localhost' && !window.location.hostname.includes('127.0.0.1');
-  const shouldUseWebSocket = !isProduction && (window.location.hostname === 'localhost' || window.location.hostname.includes('127.0.0.1'));
+  const isProduction =
+    window.location.hostname !== "localhost" &&
+    !window.location.hostname.includes("127.0.0.1");
+  const shouldUseWebSocket =
+    !isProduction &&
+    (window.location.hostname === "localhost" ||
+      window.location.hostname.includes("127.0.0.1"));
 
   // Connect WebSocket with retry logic (only in development)
   useEffect(() => {
@@ -158,7 +201,7 @@ export default function AIMatch() {
               rawData: event.data,
               dataType: typeof event.data,
               dataLength: event.data?.length || 0,
-              browserInfo: getBrowserInfo()
+              browserInfo: getBrowserInfo(),
             });
 
             // Add user-friendly error message
@@ -178,20 +221,27 @@ export default function AIMatch() {
           console.log("❌ WebSocket closed:", {
             code: event.code,
             codeDescription: closeReason,
-            reason: event.reason || 'No reason provided',
+            reason: event.reason || "No reason provided",
             wasClean: event.wasClean,
             timestamp: new Date().toISOString(),
             reconnectAttempts: reconnectAttempts,
-            maxAttempts: maxReconnectAttempts
+            maxAttempts: maxReconnectAttempts,
           });
 
           // Attempt to reconnect if not manually closed and under retry limit
           if (reconnectAttempts < maxReconnectAttempts && event.code !== 1000) {
             reconnectAttempts++;
-            console.log(`🔄 Attempting to reconnect... (${reconnectAttempts}/${maxReconnectAttempts})`);
-            reconnectTimeout = setTimeout(connectWebSocket, 3000 * reconnectAttempts);
+            console.log(
+              `🔄 Attempting to reconnect... (${reconnectAttempts}/${maxReconnectAttempts})`,
+            );
+            reconnectTimeout = setTimeout(
+              connectWebSocket,
+              3000 * reconnectAttempts,
+            );
           } else if (reconnectAttempts >= maxReconnectAttempts) {
-            console.error("❌ Max reconnection attempts reached. Please refresh the page.");
+            console.error(
+              "❌ Max reconnection attempts reached. Please refresh the page.",
+            );
           }
         };
 
@@ -201,7 +251,7 @@ export default function AIMatch() {
             readyStateText: getReadyStateText(socket.readyState),
             reconnectAttempts: reconnectAttempts,
             maxAttempts: maxReconnectAttempts,
-            browserInfo: getBrowserInfo()
+            browserInfo: getBrowserInfo(),
           });
 
           // Switch to offline mode after connection attempts
@@ -225,19 +275,18 @@ export default function AIMatch() {
           }
           setIsTyping(false);
         };
-
       } catch (connectionError) {
         debugError("❌ Failed to create WebSocket connection:", {
           error: getErrorInfo(connectionError),
           url: "ws://localhost:8000/ws",
           reconnectAttempts: reconnectAttempts,
-          browserInfo: getBrowserInfo()
+          browserInfo: getBrowserInfo(),
         });
 
         // Add user-friendly error message
         const errorMessage = {
           id: Date.now(),
-          text: `❌ Unable to connect to AI service. ${connectionError instanceof Error ? connectionError.message : 'Please make sure the server is running on port 8000.'}`,
+          text: `❌ Unable to connect to AI service. ${connectionError instanceof Error ? connectionError.message : "Please make sure the server is running on port 8000."}`,
           isUser: false,
           timestamp: new Date(),
         };
@@ -272,7 +321,11 @@ export default function AIMatch() {
     setIsTyping(true);
 
     // Check WebSocket connection or use offline mode
-    if (isOfflineMode || !socketRef.current || socketRef.current.readyState !== WebSocket.OPEN) {
+    if (
+      isOfflineMode ||
+      !socketRef.current ||
+      socketRef.current.readyState !== WebSocket.OPEN
+    ) {
       // Use demo responses in offline mode
       setTimeout(() => {
         const demoResponse = getDemoResponse(userMessage.text);
@@ -300,14 +353,16 @@ export default function AIMatch() {
     } catch (sendError) {
       debugError("❌ Error sending message:", {
         error: getErrorInfo(sendError),
-        socketState: socketRef.current ? getReadyStateText(socketRef.current.readyState) : 'No socket',
+        socketState: socketRef.current
+          ? getReadyStateText(socketRef.current.readyState)
+          : "No socket",
         messageLength: userMessage.text.length,
-        browserInfo: getBrowserInfo()
+        browserInfo: getBrowserInfo(),
       });
 
       const errorMessage = {
         id: Date.now() + 1,
-        text: `❌ Failed to send message. ${sendError instanceof Error ? sendError.message : 'Please try again.'}`,
+        text: `❌ Failed to send message. ${sendError instanceof Error ? sendError.message : "Please try again."}`,
         isUser: false,
         timestamp: new Date(),
       };
@@ -331,7 +386,9 @@ export default function AIMatch() {
             {isOfflineMode && (
               <div className="mt-2 inline-flex items-center gap-2 bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-xs">
                 <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
-                {isProduction ? 'Demo Mode - Production Environment' : 'Demo Mode - AI service unavailable'}
+                {isProduction
+                  ? "Demo Mode - Production Environment"
+                  : "Demo Mode - AI service unavailable"}
               </div>
             )}
           </div>

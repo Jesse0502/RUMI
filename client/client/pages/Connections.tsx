@@ -1,4 +1,4 @@
-import LayoutNew from "@/components/LayoutNew";
+import LayoutNew from "@/components/common/LayoutNew";
 import { MessageCircle, Users, Heart, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useState } from "react";

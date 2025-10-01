@@ -1,4 +1,4 @@
-import LayoutNew from "@/components/LayoutNew";
+import LayoutNew from "@/components/common/LayoutNew";
 import { useState, useMemo, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Upload, X, Image } from "lucide-react";
@@ -132,7 +132,8 @@ export default function Events() {
       time: "6:00 PM",
       location: "TBD",
       host: "You",
-      image: imagePreview ||
+      image:
+        imagePreview ||
         "https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=1200&h=800&fit=crop",
       tags: [form.topic || "Community"],
       price: "Free",

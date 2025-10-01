@@ -1,4 +1,4 @@
-import LayoutNew from "@/components/LayoutNew";
+import LayoutNew from "@/components/common/LayoutNew";
 import { Heart, MessageCircle, User, Mail, Star, Clock } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";

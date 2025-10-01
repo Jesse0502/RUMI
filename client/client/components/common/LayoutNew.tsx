@@ -14,7 +14,8 @@ import {
   useBackground,
   getBackgroundClasses,
 } from "@/contexts/BackgroundContext";
-import BackgroundSwitcher from "@/components/BackgroundSwitcher";
+import BackgroundSwitcher from "@/components/common/BackgroundSwitcher";
+import Logo from "./Logo";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -23,7 +24,8 @@ interface LayoutProps {
 export default function LayoutNew({ children }: LayoutProps) {
   const location = useLocation();
   const [notifEnabled, setNotifEnabled] = useState(false);
-  const [notifPermission, setNotifPermission] = useState<NotificationPermission>('default');
+  const [notifPermission, setNotifPermission] =
+    useState<NotificationPermission>("default");
 
   // Get background context with fallback
   const backgroundContext = useBackground();
@@ -33,19 +35,25 @@ export default function LayoutNew({ children }: LayoutProps) {
 
   // Check notification permission status on mount
   useEffect(() => {
-    if ('Notification' in window) {
+    if ("Notification" in window) {
       setNotifPermission(Notification.permission);
 
       // Check if already subscribed
-      if ('serviceWorker' in navigator && Notification.permission === 'granted') {
-        navigator.serviceWorker.ready.then(reg => {
-          reg.pushManager.getSubscription().then(subscription => {
-            if (subscription) {
-              setNotifEnabled(true);
-            }
-          }).catch(error => {
-            console.warn('Error checking push subscription:', error);
-          });
+      if (
+        "serviceWorker" in navigator &&
+        Notification.permission === "granted"
+      ) {
+        navigator.serviceWorker.ready.then((reg) => {
+          reg.pushManager
+            .getSubscription()
+            .then((subscription) => {
+              if (subscription) {
+                setNotifEnabled(true);
+              }
+            })
+            .catch((error) => {
+              console.warn("Error checking push subscription:", error);
+            });
         });
       }
     }
@@ -99,16 +107,20 @@ export default function LayoutNew({ children }: LayoutProps) {
 
     try {
       // Request notification permission first
-      if (Notification.permission === 'default') {
+      if (Notification.permission === "default") {
         const permission = await Notification.requestPermission();
         setNotifPermission(permission);
 
-        if (permission !== 'granted') {
-          alert("Notification permission denied. You can enable it later in browser settings.");
+        if (permission !== "granted") {
+          alert(
+            "Notification permission denied. You can enable it later in browser settings.",
+          );
           return;
         }
-      } else if (Notification.permission === 'denied') {
-        alert("Notifications are blocked. Please enable them in your browser settings.");
+      } else if (Notification.permission === "denied") {
+        alert(
+          "Notifications are blocked. Please enable them in your browser settings.",
+        );
         return;
       }
 
@@ -140,7 +152,9 @@ export default function LayoutNew({ children }: LayoutProps) {
         setNotifEnabled(true);
         // Send test notification if already enabled
         sendTestNotification();
-        alert("Push notifications are already enabled! Sending test notification...");
+        alert(
+          "Push notifications are already enabled! Sending test notification...",
+        );
         return;
       }
 
@@ -160,17 +174,21 @@ export default function LayoutNew({ children }: LayoutProps) {
       }
 
       setNotifEnabled(true);
-      setNotifPermission('granted');
+      setNotifPermission("granted");
 
       // Send a test notification
       setTimeout(() => {
         sendTestNotification();
       }, 1000);
 
-      alert("Push notifications enabled! You should receive a test notification shortly.");
+      alert(
+        "Push notifications enabled! You should receive a test notification shortly.",
+      );
     } catch (error) {
       console.error("Error enabling push notifications:", error);
-      alert(`Error enabling push notifications: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      alert(
+        `Error enabling push notifications: ${error instanceof Error ? error.message : "Unknown error"}`,
+      );
     }
   }
 
@@ -183,7 +201,7 @@ export default function LayoutNew({ children }: LayoutProps) {
         body: JSON.stringify({
           title: "RUMI Notifications Enabled! 🎉",
           body: "You'll now receive notifications for new messages, connections, and matches.",
-          data: { url: "/inbox", type: "welcome" }
+          data: { url: "/inbox", type: "welcome" },
         }),
       });
     } catch (error) {
@@ -203,10 +221,7 @@ export default function LayoutNew({ children }: LayoutProps) {
           <div className="flex items-center justify-between p-4">
             <div className="flex items-center gap-3">
               <Link to="/" className="flex items-center gap-2">
-                <h1 className="text-2xl font-display font-bold text-rumi-purple">
-                  rumi
-                </h1>
-                <span className="text-lg">✨</span>
+                <Logo starSize="3xl" textSize="5xl" />
               </Link>
             </div>
 
@@ -215,24 +230,24 @@ export default function LayoutNew({ children }: LayoutProps) {
                 onClick={enablePush}
                 className={`p-2 rounded-lg transition-all relative ${
                   notifEnabled
-                    ? 'text-green-600 hover:text-green-700 hover:bg-green-50'
-                    : notifPermission === 'denied'
-                    ? 'text-red-600 hover:text-red-700 hover:bg-red-50'
-                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                    ? "text-green-600 hover:text-green-700 hover:bg-green-50"
+                    : notifPermission === "denied"
+                      ? "text-red-600 hover:text-red-700 hover:bg-red-50"
+                      : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
                 }`}
                 title={
                   notifEnabled
-                    ? 'Notifications enabled'
-                    : notifPermission === 'denied'
-                    ? 'Notifications blocked - click to learn how to enable'
-                    : 'Enable notifications'
+                    ? "Notifications enabled"
+                    : notifPermission === "denied"
+                      ? "Notifications blocked - click to learn how to enable"
+                      : "Enable notifications"
                 }
               >
                 <Bell className="w-5 h-5" />
                 {notifEnabled && (
                   <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
                 )}
-                {notifPermission === 'denied' && (
+                {notifPermission === "denied" && (
                   <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-white"></div>
                 )}
               </button>
@@ -351,24 +366,24 @@ export default function LayoutNew({ children }: LayoutProps) {
                 onClick={enablePush}
                 className={`p-2 rounded-lg transition-all ml-2 relative ${
                   notifEnabled
-                    ? 'text-green-600 hover:text-green-700 hover:bg-green-50'
-                    : notifPermission === 'denied'
-                    ? 'text-red-600 hover:text-red-700 hover:bg-red-50'
-                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                    ? "text-green-600 hover:text-green-700 hover:bg-green-50"
+                    : notifPermission === "denied"
+                      ? "text-red-600 hover:text-red-700 hover:bg-red-50"
+                      : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
                 }`}
                 title={
                   notifEnabled
-                    ? 'Notifications enabled - click to send test notification'
-                    : notifPermission === 'denied'
-                    ? 'Notifications blocked - click to learn how to enable'
-                    : 'Enable notifications'
+                    ? "Notifications enabled - click to send test notification"
+                    : notifPermission === "denied"
+                      ? "Notifications blocked - click to learn how to enable"
+                      : "Enable notifications"
                 }
               >
                 <Bell className="w-5 h-5" />
                 {notifEnabled && (
                   <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
                 )}
-                {notifPermission === 'denied' && (
+                {notifPermission === "denied" && (
                   <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-white"></div>
                 )}
               </button>

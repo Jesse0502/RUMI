@@ -1,8 +1,11 @@
-import LayoutNew from "@/components/LayoutNew";
+import LayoutNew from "@/components/common/LayoutNew";
 import { MessageCircle, Users, Plus, Search, Filter } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { notifyConnectionAccepted, sendPushNotification } from "@/lib/notifications";
+import {
+  notifyConnectionAccepted,
+  sendPushNotification,
+} from "@/lib/notifications";
 import { toast } from "sonner";
 
 export default function ConnectionsNew() {
@@ -17,13 +20,15 @@ export default function ConnectionsNew() {
       avatar: "A",
       message: "I'd love to connect and discuss design projects together!",
       timestamp: new Date("2024-01-16T14:20:00"),
-      fromMessage: "🎯 Freelance Graphic Designer Available - Creative Solutions for Your Brand",
+      fromMessage:
+        "🎯 Freelance Graphic Designer Available - Creative Solutions for Your Brand",
     },
     {
       id: 2,
       name: "Sarah Chen",
       avatar: "S",
-      message: "Your thoughts on creativity really resonated with me. Would love to continue our conversation!",
+      message:
+        "Your thoughts on creativity really resonated with me. Would love to continue our conversation!",
       timestamp: new Date("2024-01-15T08:30:00"),
       fromMessage: "Re: Thoughts on creativity and inspiration",
     },
@@ -99,7 +104,7 @@ export default function ConnectionsNew() {
   );
 
   const approveRequest = async (requestId: number) => {
-    const request = pendingRequests.find(req => req.id === requestId);
+    const request = pendingRequests.find((req) => req.id === requestId);
     if (!request) return;
 
     try {
@@ -115,7 +120,7 @@ export default function ConnectionsNew() {
       // Remove from pending requests
       // setPendingRequests(prev => prev.filter(req => req.id !== requestId));
     } catch (error) {
-      console.error('Error approving connection:', error);
+      console.error("Error approving connection:", error);
       toast.error("Failed to approve connection", {
         description: "Please try again",
       });
@@ -123,7 +128,7 @@ export default function ConnectionsNew() {
   };
 
   const declineRequest = (requestId: number) => {
-    const request = pendingRequests.find(req => req.id === requestId);
+    const request = pendingRequests.find((req) => req.id === requestId);
     if (!request) return;
 
     // In a real app, this would call an API
@@ -206,7 +211,8 @@ export default function ConnectionsNew() {
                 </div>
                 <div>
                   <h3 className="font-medium text-blue-900">
-                    {pendingRequests.length} Pending Connection Request{pendingRequests.length > 1 ? 's' : ''}
+                    {pendingRequests.length} Pending Connection Request
+                    {pendingRequests.length > 1 ? "s" : ""}
                   </h3>
                   <p className="text-sm text-blue-700">
                     Review and respond to connection requests from other users
@@ -217,21 +223,26 @@ export default function ConnectionsNew() {
                 onClick={() => setShowPendingRequests(!showPendingRequests)}
                 className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
               >
-                {showPendingRequests ? 'Hide' : 'View'} Requests
+                {showPendingRequests ? "Hide" : "View"} Requests
               </button>
             </div>
 
             {showPendingRequests && (
               <div className="mt-4 space-y-3 border-t border-blue-200 pt-4">
                 {pendingRequests.map((request) => (
-                  <div key={request.id} className="bg-white rounded-lg p-4 border border-blue-100">
+                  <div
+                    key={request.id}
+                    className="bg-white rounded-lg p-4 border border-blue-100"
+                  >
                     <div className="flex items-start gap-4">
                       <div className="w-12 h-12 bg-gradient-to-br from-purple-400 to-pink-500 rounded-full flex items-center justify-center text-white font-semibold">
                         {request.avatar}
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-1">
-                          <h4 className="font-semibold text-gray-900">{request.name}</h4>
+                          <h4 className="font-semibold text-gray-900">
+                            {request.name}
+                          </h4>
                           <span className="text-xs text-gray-500">
                             {request.timestamp.toLocaleDateString()}
                           </span>

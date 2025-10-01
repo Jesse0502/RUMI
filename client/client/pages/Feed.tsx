@@ -1,5 +1,5 @@
 // ...existing code...
-import LayoutNew from "@/components/LayoutNew";
+import LayoutNew from "@/components/common/LayoutNew";
 import { useState, useEffect, useRef } from "react";
 
 export default function Feed() {

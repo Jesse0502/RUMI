@@ -1,4 +1,4 @@
-import LayoutNew from "@/components/LayoutNew";
+import LayoutNew from "@/components/common/LayoutNew";
 import {
   Heart,
   MessageCircle,
@@ -59,7 +59,8 @@ export default function InboxNew() {
       from: "Sarah Chen",
       avatar: "S",
       subject: "Re: Thoughts on creativity and inspiration",
-      preview: "I loved reading about your creative process! It reminded me of something Maya Angelou once said about inspiration...",
+      preview:
+        "I loved reading about your creative process! It reminded me of something Maya Angelou once said about inspiration...",
       timestamp: new Date("2024-01-15T08:30:00"),
       isRead: false,
       isStarred: true,
@@ -72,7 +73,8 @@ export default function InboxNew() {
           id: "1-1",
           from: "You",
           avatar: "Y",
-          content: "I've been thinking a lot about creativity lately. There's something magical about that moment when inspiration strikes - it's like the universe is whispering secrets directly into your soul. I find that my best ideas come when I'm not actively searching for them, but when I'm in a state of quiet receptivity.",
+          content:
+            "I've been thinking a lot about creativity lately. There's something magical about that moment when inspiration strikes - it's like the universe is whispering secrets directly into your soul. I find that my best ideas come when I'm not actively searching for them, but when I'm in a state of quiet receptivity.",
           timestamp: new Date("2024-01-13T10:00:00"),
           isFromMe: true,
         },
@@ -80,7 +82,8 @@ export default function InboxNew() {
           id: "1-2",
           from: "Sarah Chen",
           avatar: "S",
-          content: "I loved reading about your creative process! It reminded me of something Maya Angelou once said about inspiration - that it comes like a whisper, and we must be still enough to hear it. Your words about quiet receptivity really resonated with me.\n\nI've noticed that my own creative breakthroughs happen in the most unexpected moments - while washing dishes, walking in nature, or just before falling asleep. There's something about letting go of the need to control the process that opens up new possibilities.",
+          content:
+            "I loved reading about your creative process! It reminded me of something Maya Angelou once said about inspiration - that it comes like a whisper, and we must be still enough to hear it. Your words about quiet receptivity really resonated with me.\n\nI've noticed that my own creative breakthroughs happen in the most unexpected moments - while washing dishes, walking in nature, or just before falling asleep. There's something about letting go of the need to control the process that opens up new possibilities.",
           timestamp: new Date("2024-01-14T15:45:00"),
           isFromMe: false,
         },
@@ -88,7 +91,8 @@ export default function InboxNew() {
           id: "1-3",
           from: "You",
           avatar: "Y",
-          content: "That Maya Angelou quote is perfect! It's exactly what I was trying to articulate. I love how you mentioned those in-between moments - the dishes, the walks, the drowsy edge of sleep. It's like creativity lives in the margins of our daily lives, waiting for us to notice.",
+          content:
+            "That Maya Angelou quote is perfect! It's exactly what I was trying to articulate. I love how you mentioned those in-between moments - the dishes, the walks, the drowsy edge of sleep. It's like creativity lives in the margins of our daily lives, waiting for us to notice.",
           timestamp: new Date("2024-01-14T18:20:00"),
           isFromMe: true,
         },
@@ -96,18 +100,21 @@ export default function InboxNew() {
           id: "1-4",
           from: "Sarah Chen",
           avatar: "S",
-          content: "Yes! The margins - what a beautiful way to put it. I think that's why so many artists talk about the importance of boredom and daydreaming. We live in such a stimulated world that we rarely give ourselves permission to just... exist in those quiet spaces where creativity can bloom.",
+          content:
+            "Yes! The margins - what a beautiful way to put it. I think that's why so many artists talk about the importance of boredom and daydreaming. We live in such a stimulated world that we rarely give ourselves permission to just... exist in those quiet spaces where creativity can bloom.",
           timestamp: new Date("2024-01-15T08:30:00"),
           isFromMe: false,
         },
-      ]
+      ],
     },
     {
       id: 2,
       from: "Alex Johnson",
       avatar: "A",
-      subject: "🎯 Freelance Graphic Designer Available - Creative Solutions for Your Brand",
-      preview: "Hi! I'm Alex, a passionate graphic designer with 5+ years of experience in brand identity, web design, and digital marketing...",
+      subject:
+        "🎯 Freelance Graphic Designer Available - Creative Solutions for Your Brand",
+      preview:
+        "Hi! I'm Alex, a passionate graphic designer with 5+ years of experience in brand identity, web design, and digital marketing...",
       timestamp: new Date("2024-01-16T14:20:00"),
       isRead: false,
       isStarred: false,
@@ -120,18 +127,20 @@ export default function InboxNew() {
           id: "2-1",
           from: "Alex Johnson",
           avatar: "A",
-          content: "Hi! I'm Alex, a passionate graphic designer with 5+ years of experience in brand identity, web design, and digital marketing. I specialize in creating modern, clean designs that tell your story and connect with your audience.\n\n🎨 What I offer:\n• Logo design & brand identity\n• Website design & development\n• Social media graphics\n• Print design (brochures, business cards, etc.)\n• UI/UX design\n\n💼 Recent projects include work for tech startups, local businesses, and creative agencies. I pride myself on delivering high-quality work on time and within budget.\n\nI'd love to learn more about your project and how I can help bring your vision to life. My rates are competitive and I offer package deals for comprehensive branding projects.\n\nFeel free to check out my portfolio at alexjohnsondesign.com or reach out if you'd like to discuss your needs!\n\nBest regards,\nAlex Johnson\nFreelance Graphic Designer\nalex@alexjohnsondesign.com\n(555) 123-4567",
+          content:
+            "Hi! I'm Alex, a passionate graphic designer with 5+ years of experience in brand identity, web design, and digital marketing. I specialize in creating modern, clean designs that tell your story and connect with your audience.\n\n🎨 What I offer:\n• Logo design & brand identity\n• Website design & development\n• Social media graphics\n• Print design (brochures, business cards, etc.)\n• UI/UX design\n\n💼 Recent projects include work for tech startups, local businesses, and creative agencies. I pride myself on delivering high-quality work on time and within budget.\n\nI'd love to learn more about your project and how I can help bring your vision to life. My rates are competitive and I offer package deals for comprehensive branding projects.\n\nFeel free to check out my portfolio at alexjohnsondesign.com or reach out if you'd like to discuss your needs!\n\nBest regards,\nAlex Johnson\nFreelance Graphic Designer\nalex@alexjohnsondesign.com\n(555) 123-4567",
           timestamp: new Date("2024-01-16T14:20:00"),
           isFromMe: false,
-        }
-      ]
+        },
+      ],
     },
     {
       id: 3,
       from: "Anonymous Writer",
       avatar: "?",
       subject: "Your letter touched my heart",
-      preview: "I don't usually reach out to strangers, but your letter about overcoming challenges gave me hope during a difficult time...",
+      preview:
+        "I don't usually reach out to strangers, but your letter about overcoming challenges gave me hope during a difficult time...",
       timestamp: new Date("2024-01-14T10:20:00"),
       isRead: true,
       isStarred: true,
@@ -144,11 +153,12 @@ export default function InboxNew() {
           id: "3-1",
           from: "Anonymous Writer",
           avatar: "?",
-          content: "I don't usually reach out to strangers, but your letter about overcoming challenges gave me hope during a difficult time in my life.\n\nI've been struggling with some personal setbacks recently, and your words about finding strength in vulnerability really spoke to me. There's something powerful about sharing our stories - it reminds us that we're not alone in our struggles.\n\nYour perspective on how challenges can become catalysts for growth has given me a new way to look at my current situation. Instead of seeing my difficulties as roadblocks, I'm trying to view them as opportunities for transformation.\n\nThank you for having the courage to share your story. It means more than you know.\n\nWith gratitude,\nA fellow traveler on this journey",
+          content:
+            "I don't usually reach out to strangers, but your letter about overcoming challenges gave me hope during a difficult time in my life.\n\nI've been struggling with some personal setbacks recently, and your words about finding strength in vulnerability really spoke to me. There's something powerful about sharing our stories - it reminds us that we're not alone in our struggles.\n\nYour perspective on how challenges can become catalysts for growth has given me a new way to look at my current situation. Instead of seeing my difficulties as roadblocks, I'm trying to view them as opportunities for transformation.\n\nThank you for having the courage to share your story. It means more than you know.\n\nWith gratitude,\nA fellow traveler on this journey",
           timestamp: new Date("2024-01-14T10:20:00"),
           isFromMe: false,
-        }
-      ]
+        },
+      ],
     },
   ];
 
@@ -169,7 +179,16 @@ export default function InboxNew() {
 
   // Generate more letters for pagination
   const generateMoreLetters = (count: number) => {
-    const names = ["Alex Johnson", "Maria Garcia", "David Kim", "Sophie Brown", "James Wilson", "Elena Rodriguez", "Michael Zhang", "Isabella Chen"];
+    const names = [
+      "Alex Johnson",
+      "Maria Garcia",
+      "David Kim",
+      "Sophie Brown",
+      "James Wilson",
+      "Elena Rodriguez",
+      "Michael Zhang",
+      "Isabella Chen",
+    ];
     const subjects = [
       "Re: Your thoughts on remote work",
       "Coffee chat invitation",
@@ -178,7 +197,7 @@ export default function InboxNew() {
       "Weekend hiking plans",
       "Book recommendation",
       "Project update",
-      "Networking event follow-up"
+      "Networking event follow-up",
     ];
 
     return Array.from({ length: count }, (_, i) => {
@@ -191,12 +210,18 @@ export default function InboxNew() {
         avatar: name[0],
         subject: `${subject} #${id}`,
         preview: `This is a sample message preview for letter ${id}. It contains some interesting content that you might want to read...`,
-        timestamp: new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000),
+        timestamp: new Date(
+          Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000,
+        ),
         isRead: Math.random() > 0.3,
         isStarred: Math.random() > 0.8,
         hasAttachment: Math.random() > 0.7,
-        category: ["personal", "work", "creative", "social"][Math.floor(Math.random() * 4)],
-        mood: ["friendly", "professional", "excited", "thoughtful"][Math.floor(Math.random() * 4)],
+        category: ["personal", "work", "creative", "social"][
+          Math.floor(Math.random() * 4)
+        ],
+        mood: ["friendly", "professional", "excited", "thoughtful"][
+          Math.floor(Math.random() * 4)
+        ],
         replyCount: Math.floor(Math.random() * 3),
       };
     });
@@ -211,8 +236,8 @@ export default function InboxNew() {
       const newLetters = generateMoreLetters(10);
       nextIdRef.current += 10; // Update next ID for future generations
 
-      setAllLetters(prev => [...prev, ...newLetters]);
-      setPage(prev => {
+      setAllLetters((prev) => [...prev, ...newLetters]);
+      setPage((prev) => {
         const newPage = prev + 1;
         // Stop loading after 5 pages
         if (newPage >= 5) {
@@ -232,7 +257,7 @@ export default function InboxNew() {
           loadMoreLetters();
         }
       },
-      { threshold: 0.1 }
+      { threshold: 0.1 },
     );
 
     if (bottomRef.current) {
@@ -344,7 +369,8 @@ export default function InboxNew() {
 
   const getFileIcon = (file: File) => {
     if (file.type.startsWith("image/")) return <Image className="w-4 h-4" />;
-    if (file.type === "application/pdf") return <FileText className="w-4 h-4" />;
+    if (file.type === "application/pdf")
+      return <FileText className="w-4 h-4" />;
     return <Paperclip className="w-4 h-4" />;
   };
 
@@ -354,10 +380,8 @@ export default function InboxNew() {
 
     // Mark message as read if it wasn't already
     if (!letter.isRead) {
-      setAllLetters(prev =>
-        prev.map(l =>
-          l.id === letter.id ? { ...l, isRead: true } : l
-        )
+      setAllLetters((prev) =>
+        prev.map((l) => (l.id === letter.id ? { ...l, isRead: true } : l)),
       );
     }
   };
@@ -391,25 +415,29 @@ export default function InboxNew() {
     };
 
     // Update reply count and conversation for the message
-    setAllLetters(prev =>
-      prev.map(l =>
+    setAllLetters((prev) =>
+      prev.map((l) =>
         l.id === selectedMessage.id
           ? {
               ...l,
               replyCount: l.replyCount + 1,
-              conversation: l.conversation ? [...l.conversation, newReply] : [newReply],
+              conversation: l.conversation
+                ? [...l.conversation, newReply]
+                : [newReply],
               timestamp: new Date(), // Update timestamp to show as most recent
               isRead: true,
             }
-          : l
-      )
+          : l,
+      ),
     );
 
     // Update selected message
-    setSelectedMessage(prev => ({
+    setSelectedMessage((prev) => ({
       ...prev,
       replyCount: prev.replyCount + 1,
-      conversation: prev.conversation ? [...prev.conversation, newReply] : [newReply],
+      conversation: prev.conversation
+        ? [...prev.conversation, newReply]
+        : [newReply],
       timestamp: new Date(),
       isRead: true,
     }));
@@ -443,7 +471,8 @@ export default function InboxNew() {
 
     // Show success notification
     toast.success("Letter composed successfully!", {
-      description: "AI will analyze your content and send to matching recipients",
+      description:
+        "AI will analyze your content and send to matching recipients",
       duration: 4000,
     });
   };
@@ -594,7 +623,7 @@ export default function InboxNew() {
                 if (
                   e.target instanceof HTMLInputElement ||
                   e.target instanceof HTMLButtonElement ||
-                  (e.target as HTMLElement).closest('button') ||
+                  (e.target as HTMLElement).closest("button") ||
                   (e.target as HTMLElement).closest('input[type="checkbox"]')
                 ) {
                   return;
@@ -726,7 +755,9 @@ export default function InboxNew() {
             <div className="w-full max-w-2xl bg-white rounded-2xl shadow-2xl overflow-y-auto max-h-[90vh]">
               <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-xl font-semibold text-gray-900">Compose Letter</h3>
+                  <h3 className="text-xl font-semibold text-gray-900">
+                    Compose Letter
+                  </h3>
                   <button
                     onClick={() => setShowComposeModal(false)}
                     className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
@@ -735,7 +766,8 @@ export default function InboxNew() {
                   </button>
                 </div>
                 <p className="text-sm text-gray-600 mt-1">
-                  AI will analyze your letter and send it to people who match your criteria
+                  AI will analyze your letter and send it to people who match
+                  your criteria
                 </p>
               </div>
 
@@ -749,7 +781,9 @@ export default function InboxNew() {
                     <input
                       type="text"
                       value={letterForm.title}
-                      onChange={(e) => setLetterForm({ ...letterForm, title: e.target.value })}
+                      onChange={(e) =>
+                        setLetterForm({ ...letterForm, title: e.target.value })
+                      }
                       placeholder="e.g., Looking for a Co-founder for My Startup"
                       className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-300"
                     />
@@ -761,7 +795,12 @@ export default function InboxNew() {
                     </label>
                     <textarea
                       value={letterForm.content}
-                      onChange={(e) => setLetterForm({ ...letterForm, content: e.target.value })}
+                      onChange={(e) =>
+                        setLetterForm({
+                          ...letterForm,
+                          content: e.target.value,
+                        })
+                      }
                       rows={8}
                       placeholder="Share your story, idea, or what you're looking for. Be detailed and authentic - this helps AI find the right people for you."
                       className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-300 resize-none"
@@ -827,7 +866,9 @@ export default function InboxNew() {
 
                 {/* AI Matching Criteria */}
                 <div className="space-y-4 border-t border-gray-200 pt-6">
-                  <h4 className="font-medium text-gray-900">Help AI Find the Right People</h4>
+                  <h4 className="font-medium text-gray-900">
+                    Help AI Find the Right People
+                  </h4>
 
                   <div className="grid md:grid-cols-2 gap-4">
                     <div>
@@ -837,7 +878,12 @@ export default function InboxNew() {
                       <input
                         type="text"
                         value={letterForm.targetAudience}
-                        onChange={(e) => setLetterForm({ ...letterForm, targetAudience: e.target.value })}
+                        onChange={(e) =>
+                          setLetterForm({
+                            ...letterForm,
+                            targetAudience: e.target.value,
+                          })
+                        }
                         placeholder="e.g., entrepreneurs, developers, designers"
                         className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300"
                       />
@@ -850,7 +896,12 @@ export default function InboxNew() {
                       <input
                         type="text"
                         value={letterForm.skills}
-                        onChange={(e) => setLetterForm({ ...letterForm, skills: e.target.value })}
+                        onChange={(e) =>
+                          setLetterForm({
+                            ...letterForm,
+                            skills: e.target.value,
+                          })
+                        }
                         placeholder="e.g., React, UI/UX, marketing"
                         className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300"
                       />
@@ -864,7 +915,12 @@ export default function InboxNew() {
                     <input
                       type="text"
                       value={letterForm.lookingFor}
-                      onChange={(e) => setLetterForm({ ...letterForm, lookingFor: e.target.value })}
+                      onChange={(e) =>
+                        setLetterForm({
+                          ...letterForm,
+                          lookingFor: e.target.value,
+                        })
+                      }
                       placeholder="e.g., co-founder position, collaboration, mentorship"
                       className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300"
                     />
@@ -917,9 +973,13 @@ export default function InboxNew() {
                         {selectedMessage.from}
                       </h3>
                       <div className="flex items-center gap-2 text-sm text-gray-600">
-                        <span>{formatTimestamp(selectedMessage.timestamp)}</span>
+                        <span>
+                          {formatTimestamp(selectedMessage.timestamp)}
+                        </span>
                         <span>•</span>
-                        <span className="capitalize">{selectedMessage.category}</span>
+                        <span className="capitalize">
+                          {selectedMessage.category}
+                        </span>
                         <span>{getMoodEmoji(selectedMessage.mood)}</span>
                       </div>
                     </div>
@@ -956,7 +1016,10 @@ export default function InboxNew() {
                       <div className="flex items-center gap-1 text-gray-600">
                         <MessageCircle className="w-4 h-4" />
                         <span className="text-sm">
-                          {selectedMessage.replyCount} {selectedMessage.replyCount === 1 ? 'reply' : 'replies'}
+                          {selectedMessage.replyCount}{" "}
+                          {selectedMessage.replyCount === 1
+                            ? "reply"
+                            : "replies"}
                         </span>
                       </div>
                     )}
@@ -966,56 +1029,78 @@ export default function InboxNew() {
                 {/* Conversation Thread - Email Style */}
                 <div className="space-y-4">
                   {(selectedMessage.conversation || []).length > 0 ? (
-                    (selectedMessage.conversation || []).map((message: any, index: number) => (
-                      <div key={message.id} className="border border-gray-200 rounded-lg overflow-hidden">
-                        {/* Email Header */}
-                        <div className="bg-gray-50 px-6 py-3 border-b border-gray-200">
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-3">
-                              <div
-                                className={`w-8 h-8 bg-gradient-to-br ${
-                                  message.isFromMe
-                                    ? 'from-indigo-400 to-purple-500'
-                                    : getAvatarColor(message.from)
-                                } rounded-full flex items-center justify-center text-white font-semibold text-xs`}
-                              >
-                                {message.avatar}
-                              </div>
-                              <div>
-                                <div className="flex items-center gap-2">
-                                  <span className="font-medium text-gray-900">{message.from}</span>
-                                  {message.isFromMe && (
-                                    <span className="text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full">You</span>
-                                  )}
+                    (selectedMessage.conversation || []).map(
+                      (message: any, index: number) => (
+                        <div
+                          key={message.id}
+                          className="border border-gray-200 rounded-lg overflow-hidden"
+                        >
+                          {/* Email Header */}
+                          <div className="bg-gray-50 px-6 py-3 border-b border-gray-200">
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-3">
+                                <div
+                                  className={`w-8 h-8 bg-gradient-to-br ${
+                                    message.isFromMe
+                                      ? "from-indigo-400 to-purple-500"
+                                      : getAvatarColor(message.from)
+                                  } rounded-full flex items-center justify-center text-white font-semibold text-xs`}
+                                >
+                                  {message.avatar}
                                 </div>
-                                <div className="text-xs text-gray-500">
-                                  {message.timestamp.toLocaleDateString()} at {message.timestamp.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })}
+                                <div>
+                                  <div className="flex items-center gap-2">
+                                    <span className="font-medium text-gray-900">
+                                      {message.from}
+                                    </span>
+                                    {message.isFromMe && (
+                                      <span className="text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full">
+                                        You
+                                      </span>
+                                    )}
+                                  </div>
+                                  <div className="text-xs text-gray-500">
+                                    {message.timestamp.toLocaleDateString()} at{" "}
+                                    {message.timestamp.toLocaleTimeString(
+                                      "en-US",
+                                      {
+                                        hour: "numeric",
+                                        minute: "2-digit",
+                                        hour12: true,
+                                      },
+                                    )}
+                                  </div>
                                 </div>
                               </div>
+                              {index === 0 && !message.isFromMe && (
+                                <button className="text-xs bg-indigo-600 text-white px-3 py-1 rounded-full hover:bg-indigo-700 transition-colors">
+                                  Send Connection Request
+                                </button>
+                              )}
                             </div>
-                            {index === 0 && !message.isFromMe && (
-                              <button className="text-xs bg-indigo-600 text-white px-3 py-1 rounded-full hover:bg-indigo-700 transition-colors">
-                                Send Connection Request
-                              </button>
-                            )}
                           </div>
-                        </div>
 
-                        {/* Email Content */}
-                        <div className="p-6">
-                          <div className="prose prose-sm max-w-none">
-                            <p className="text-gray-800 leading-relaxed whitespace-pre-wrap m-0">
-                              {message.content}
-                            </p>
+                          {/* Email Content */}
+                          <div className="p-6">
+                            <div className="prose prose-sm max-w-none">
+                              <p className="text-gray-800 leading-relaxed whitespace-pre-wrap m-0">
+                                {message.content}
+                              </p>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    ))
+                      ),
+                    )
                   ) : (
                     <div className="border border-gray-200 rounded-lg p-6">
                       <div className="text-center">
-                        <p className="text-gray-600 mb-4">This is the beginning of your conversation with {selectedMessage.from}.</p>
-                        <p className="text-gray-500 text-sm mb-4">{selectedMessage.preview}</p>
+                        <p className="text-gray-600 mb-4">
+                          This is the beginning of your conversation with{" "}
+                          {selectedMessage.from}.
+                        </p>
+                        <p className="text-gray-500 text-sm mb-4">
+                          {selectedMessage.preview}
+                        </p>
                         <button className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors">
                           Send Connection Request
                         </button>
@@ -1027,15 +1112,21 @@ export default function InboxNew() {
                 {/* Attachments (Demo) */}
                 {selectedMessage.hasAttachment && (
                   <div>
-                    <h4 className="font-medium text-gray-900 mb-3">Attachments</h4>
+                    <h4 className="font-medium text-gray-900 mb-3">
+                      Attachments
+                    </h4>
                     <div className="space-y-2">
                       <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
                         <Image className="w-5 h-5 text-gray-500" />
                         <div className="flex-1">
-                          <div className="text-sm font-medium text-gray-900">sunset-photo.jpg</div>
+                          <div className="text-sm font-medium text-gray-900">
+                            sunset-photo.jpg
+                          </div>
                           <div className="text-xs text-gray-500">2.3 MB</div>
                         </div>
-                        <button className="text-sm text-indigo-600 hover:text-indigo-700">Download</button>
+                        <button className="text-sm text-indigo-600 hover:text-indigo-700">
+                          Download
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -1050,7 +1141,9 @@ export default function InboxNew() {
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2 text-sm text-gray-700">
                             <Reply className="w-4 h-4" />
-                            <span className="font-medium">Reply to {selectedMessage.from}</span>
+                            <span className="font-medium">
+                              Reply to {selectedMessage.from}
+                            </span>
                           </div>
                           <button
                             onClick={toggleReply}
@@ -1080,16 +1173,24 @@ export default function InboxNew() {
                             accept="image/*,.pdf,.doc,.docx,.txt"
                             onChange={(e) => {
                               const files = Array.from(e.target.files || []);
-                              setReplyAttachments(prev => [...prev, ...files]);
+                              setReplyAttachments((prev) => [
+                                ...prev,
+                                ...files,
+                              ]);
                             }}
                             className="hidden"
                           />
 
                           {replyAttachments.length > 0 && (
                             <div className="space-y-2 mb-4">
-                              <label className="text-sm font-medium text-gray-700">Attachments:</label>
+                              <label className="text-sm font-medium text-gray-700">
+                                Attachments:
+                              </label>
                               {replyAttachments.map((file, index) => (
-                                <div key={index} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                                <div
+                                  key={index}
+                                  className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg"
+                                >
                                   {getFileIcon(file)}
                                   <div className="flex-1 min-w-0">
                                     <div className="text-sm font-medium text-gray-900 truncate">
@@ -1100,7 +1201,11 @@ export default function InboxNew() {
                                     </div>
                                   </div>
                                   <button
-                                    onClick={() => setReplyAttachments(prev => prev.filter((_, i) => i !== index))}
+                                    onClick={() =>
+                                      setReplyAttachments((prev) =>
+                                        prev.filter((_, i) => i !== index),
+                                      )
+                                    }
                                     className="p-1 hover:bg-gray-200 rounded"
                                   >
                                     <X className="w-4 h-4 text-gray-500" />
@@ -1148,12 +1253,12 @@ export default function InboxNew() {
                     onClick={toggleReply}
                     className={`flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-xl transition-colors ${
                       isReplying
-                        ? 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                        : 'bg-indigo-600 text-white hover:bg-indigo-700'
+                        ? "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                        : "bg-indigo-600 text-white hover:bg-indigo-700"
                     }`}
                   >
                     <Reply className="w-4 h-4" />
-                    {isReplying ? 'Cancel Reply' : 'Reply'}
+                    {isReplying ? "Cancel Reply" : "Reply"}
                   </button>
                   <button className="flex items-center justify-center gap-2 px-6 py-3 border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 transition-colors">
                     <Forward className="w-4 h-4" />
@@ -1166,16 +1271,23 @@ export default function InboxNew() {
                   <button
                     className="flex items-center justify-center gap-2 px-6 py-3 border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 transition-colors"
                     onClick={() => {
-                      setAllLetters(prev =>
-                        prev.map(l =>
-                          l.id === selectedMessage.id ? { ...l, isStarred: !l.isStarred } : l
-                        )
+                      setAllLetters((prev) =>
+                        prev.map((l) =>
+                          l.id === selectedMessage.id
+                            ? { ...l, isStarred: !l.isStarred }
+                            : l,
+                        ),
                       );
-                      setSelectedMessage(prev => ({...prev, isStarred: !prev.isStarred}));
+                      setSelectedMessage((prev) => ({
+                        ...prev,
+                        isStarred: !prev.isStarred,
+                      }));
                     }}
                   >
-                    <Star className={`w-4 h-4 ${selectedMessage.isStarred ? 'fill-current text-yellow-500' : ''}`} />
-                    {selectedMessage.isStarred ? 'Unstar' : 'Star'}
+                    <Star
+                      className={`w-4 h-4 ${selectedMessage.isStarred ? "fill-current text-yellow-500" : ""}`}
+                    />
+                    {selectedMessage.isStarred ? "Unstar" : "Star"}
                   </button>
                 </div>
               </div>

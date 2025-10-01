@@ -1,31 +1,15 @@
 // ...existing code...
 import React from "react";
 import { Link } from "react-router-dom";
-import Logo from "../components/Logo";
-import PWADownloadBtn from "@/components/PWADownloadBtn";
+import Logo from "../components/common/Logo";
+import PWADownloadBtn from "@/components/common/PWADownloadBtn";
+import ExtNavbar from "@/components/Navbar/ExtNavbar";
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-neutral-50">
       {/* Top navigation */}
-      <header className="bg-white border-b border-gray-100">
-        <div className="content-width py-4 flex items-center justify-between">
-          <Logo />
-          <nav className="hidden md:flex items-center gap-6 text-sm text-gray-700">
-            <PWADownloadBtn />
-            <Link to="/onboarding" className="btn-primary px-4 py-2 text-sm">
-              Get started
-            </Link>
-          </nav>
-
-          <div className="md:hidden">
-            <Link to="/onboarding" className="btn-primary px-3 py-1 text-sm">
-              Start
-            </Link>
-          </div>
-        </div>
-      </header>
-
+      <ExtNavbar />
       {/* Hero */}
       <main className="py-20">
         <div className="content-width grid gap-12 lg:grid-cols-2 items-center">
@@ -43,14 +27,14 @@ export default function Home() {
 
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
-                to="/onboarding"
+                to="/get-started"
                 className="btn-primary px-5 py-3 text-base"
               >
                 Try AI Match — free
               </Link>
-              <Link to="/feed" className="btn-secondary px-5 py-3 text-base">
+              {/* <Link to="/feed" className="btn-secondary px-5 py-3 text-base">
                 Explore members
-              </Link>
+              </Link> */}
             </div>
 
             <div className="mt-8 grid grid-cols-3 gap-3 text-sm text-gray-600">
@@ -130,24 +114,18 @@ export default function Home() {
                   </p>
 
                   <div className="mt-4 flex gap-2">
-                    <Link
-                      to="/profile/3"
+                    <p
+                      // to="/profile/3"
                       className="px-4 py-2 rounded-md bg-indigo-600 text-white text-sm"
                     >
                       View profile
-                    </Link>
-                    <Link
-                      to="/chat"
-                      className="px-4 py-2 rounded-md border border-gray-200 text-sm"
-                    >
+                    </p>
+                    <p className="px-4 py-2 rounded-md border border-gray-200 text-sm">
                       Message
-                    </Link>
-                    <Link
-                      to="/connect"
-                      className="px-4 py-2 rounded-md bg-white text-sm border border-gray-200"
-                    >
+                    </p>
+                    <p className="px-4 py-2 rounded-md bg-white text-sm border border-gray-200">
                       Connect
-                    </Link>
+                    </p>
                   </div>
                 </div>
               </div>
@@ -204,8 +182,8 @@ export default function Home() {
                 Connect with confidence
               </div>
               <p className="text-sm text-gray-500 mt-2">
-                Message, schedule a chat, or join group sessions to build real
-                relationships.
+                Message, Send Connection Request, or join group sessions to
+                build real relationships.
               </p>
             </div>
 
@@ -236,27 +214,21 @@ export default function Home() {
             </div>
 
             <div className="flex gap-3">
-              <Link to="/onboarding" className="btn-primary px-4 py-2">
+              <Link to="/get-started" className="btn-primary px-4 py-2">
                 Try AI Match
-              </Link>
-              <Link to="/feed" className="btn-secondary px-4 py-2">
-                Browse members
               </Link>
             </div>
           </div>
 
           <div className="mt-8 border-t border-gray-100 pt-6 flex flex-col md:flex-row items-center justify-between text-sm text-gray-500">
             <div className="flex items-center gap-4">
-              <Logo />
-              <span>© {new Date().getFullYear()} RUMI</span>
+              <Logo starColor="gray" textColor="gray" />
+              {/* <span>© {new Date().getFullYear()} RUMI</span> */}
             </div>
 
             <div className="flex gap-4 mt-4 md:mt-0">
               <Link to="/terms" className="hover:underline">
-                Terms
-              </Link>
-              <Link to="/privacy" className="hover:underline">
-                Privacy
+                Terms & Privacy
               </Link>
             </div>
           </div>

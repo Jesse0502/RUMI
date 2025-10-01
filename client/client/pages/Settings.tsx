@@ -1,4 +1,4 @@
-import LayoutNew from "@/components/LayoutNew";
+import LayoutNew from "@/components/common/LayoutNew";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -326,6 +326,7 @@ export default function Settings() {
                         ))}
                       </div>
                       <div className="flex items-center justify-between mt-3">
+                        {/* @ts-ignore */}
                         <div className="text-xs text-gray-600">Impr: {c.timeseries.at(-1)?.impressions ?? 0} · Clicks: {c.timeseries.at(-1)?.clicks ?? 0}</div>
                         <div className="flex gap-2">
                           <Button size="sm" variant="secondary" onClick={() => pauseResume(c.id)}>
