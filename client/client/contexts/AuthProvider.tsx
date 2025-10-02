@@ -20,15 +20,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   // Handle invalid token
   useEffect(() => {
-    if (!token && !isLocalhost) {
+    if (!isLocalhost) {
       // allow only homepage, onboarding, and waitlist
-      if (
-        location.pathname !== "/" &&
-        location.pathname !== "/onboarding" &&
-        location.pathname !== "/waitlist"
-      ) {
-        navigate("/waitlist");
-      }
+
+      navigate("/waitlist");
+
       return;
     }
 
