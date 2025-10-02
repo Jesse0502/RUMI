@@ -23,18 +23,25 @@ export default function Waitlist() {
   const [email, setEmail] = useState("");
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await fetch("/.netlify/functions/subscribe", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email }),
-    });
+    try {
+      const res = await fetch("/.netlify/functions/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
 
-    const data = await res.json();
-    if (res.ok) {
-      console.log("Success:", data);
-      alert("You’ve joined the waitlist 🎉");
-    } else {
-      console.error("Error:", data);
+      console.log("res", res);
+
+      const data = await res.json();
+      if (res.ok) {
+        console.log("Success:", data);
+        alert("You’ve joined the waitlist 🎉");
+      } else {
+        console.error("Error:", data);
+        alert("Something went wrong. Try again!");
+      }
+    } catch (err) {
+      console.error("Error:", err);
       alert("Something went wrong. Try again!");
     }
   };
@@ -102,7 +109,10 @@ export default function Waitlist() {
           <p className="text-gray-600 mb-6">
             Get early access when we launch. No spam, just the latest updates.
           </p>
-          <form className="flex flex-col sm:flex-row gap-3 justify-center">
+          <form
+            onSubmit={handleSubmit}
+            className="flex flex-col sm:flex-row gap-3 justify-center"
+          >
             <input
               type="email"
               required
@@ -112,8 +122,8 @@ export default function Waitlist() {
               className="input-field flex-1 px-4 py-3 rounded-md border border-gray-300 shadow-sm focus:ring-rumi-purple focus:border-rumi-purple"
             />
             <button
-              onSubmit={handleSubmit}
               type="submit"
+              role="submit"
               className="btn-primary px-6 py-3 rounded-md transition-transform hover:scale-105"
             >
               Join Waitlist
