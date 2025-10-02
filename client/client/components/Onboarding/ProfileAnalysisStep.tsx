@@ -82,7 +82,7 @@ const ProfileAnalysisStep = ({
       console.log("res try", res);
 
       setIsLoading(false);
-
+      // @ts-ignore
       setAttributes((prev) => ({ ...prev, ...res?.attributes }));
     } catch (error) {
       console.error("Upload failed", error);

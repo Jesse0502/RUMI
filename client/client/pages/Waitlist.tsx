@@ -124,6 +124,7 @@ export default function Waitlist() {
 
       {/* Footer */}
       <footer className="bg-neutral-50 py-8 text-center text-sm text-gray-500 border-t border-gray-200">
+        {/* @ts-ignore */}
         <Logo starColor="gray" textColor="gray" className="mx-auto mb-2" />
         <p>© {new Date().getFullYear()} RUMI. All rights reserved.</p>
       </footer>
