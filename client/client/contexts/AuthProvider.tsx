@@ -13,36 +13,38 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const token = localStorage.getItem("token");
   const isLocalhost = window.location.hostname === "localhost";
 
-  // ⚡ Only run query if token exists and not on localhost
+  // Run query only if token exists and not localhost
   const { data, error, isLoading } = useGetUserInfoQuery(undefined, {
     skip: !token || isLocalhost,
   });
 
-  // Handle invalid token
   useEffect(() => {
-    if (!isLocalhost) {
-      // allow only homepage, onboarding, and waitlist
+    if (isLocalhost) return; // full access in localhost
 
-      navigate("/waitlist");
-
+    // ✅ If no token
+    if (!token) {
+      const allowedPaths = ["/waitlist"];
+      if (!allowedPaths.includes(location.pathname)) {
+        navigate("/waitlist", { replace: true });
+      }
       return;
     }
 
-    if (error && !isLocalhost) {
+    // ✅ If token but error
+    if (error) {
       localStorage.removeItem("token");
-      navigate("/get-started");
+      navigate("/waitlist", { replace: true });
+      return;
     }
-  }, [error, token, isLocalhost, location.pathname]);
 
-  // Handle valid token
-  useEffect(() => {
-    if (data && !isLocalhost) {
+    // ✅ If valid token
+    if (data) {
       dispatch(logIn({ token: data.token!, userInfo: data.userInfo }));
       if (location.pathname === "/" || location.pathname === "/get-started") {
-        navigate("/feed");
+        navigate("/feed", { replace: true });
       }
     }
-  }, [data, isLocalhost, location.pathname]);
+  }, [token, error, data, location.pathname, isLocalhost, navigate, dispatch]);
 
   if (isLoading && !isLocalhost) {
     return (

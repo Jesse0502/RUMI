@@ -6,7 +6,7 @@ function LandingNavbar({ onOpen }) {
   return (
     <nav className="fixed top-0 left-0 w-full bg-white/80 backdrop-blur-md shadow-sm z-50">
       <div className="content-width flex items-center justify-between py-4 px-4 md:px-8">
-        <Logo starColor="purple" textColor="gray" />
+        <Logo starColor="text-rumi-purple" textColor="text-rumi-purple" />
         <button
           onClick={onOpen}
           className="btn-primary px-4 py-2 rounded-md text-sm transition-transform hover:scale-105"
