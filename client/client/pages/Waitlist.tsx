@@ -3,17 +3,17 @@ import { Link } from "react-router-dom";
 import Logo from "../components/common/Logo";
 
 // Simple Navbar inside this file
-function LandingNavbar() {
+function LandingNavbar({ onOpen }) {
   return (
     <nav className="fixed top-0 left-0 w-full bg-white/80 backdrop-blur-md shadow-sm z-50">
       <div className="content-width flex items-center justify-between py-4">
         <Logo starColor="purple" textColor="gray" />
-        <Link
-          to="#waitlist"
+        <button
+          onClick={onOpen}
           className="btn-primary px-4 py-2 rounded-md text-sm transition-transform hover:scale-105"
         >
           Join Waitlist
-        </Link>
+        </button>
       </div>
     </nav>
   );
@@ -21,6 +21,8 @@ function LandingNavbar() {
 
 export default function Waitlist() {
   const [email, setEmail] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -30,18 +32,15 @@ export default function Waitlist() {
         body: JSON.stringify({ email }),
       });
 
-      console.log("res", res);
-
       const data = await res.json();
       if (res.ok) {
-        console.log("Success:", data);
         alert("You’ve joined the waitlist 🎉");
+        setIsOpen(false);
+        setEmail("");
       } else {
-        console.error("Error:", data);
         alert("Something went wrong. Try again!");
       }
     } catch (err) {
-      console.error("Error:", err);
       alert("Something went wrong. Try again!");
     }
   };
@@ -49,10 +48,10 @@ export default function Waitlist() {
   return (
     <div className="min-h-screen bg-neutral-50 flex flex-col">
       {/* Navbar */}
-      <LandingNavbar />
+      <LandingNavbar onOpen={() => setIsOpen(true)} />
 
       {/* Hero Section */}
-      <main className="mt-7 flex-1 flex items-center justify-center py-32">
+      <main className="my-[10vh] flex-1 flex items-center justify-center py-32">
         <div className="content-width grid gap-12 lg:grid-cols-2 items-center">
           <section className="animate-fadeInUp">
             <h1 className="text-4xl md:text-5xl font-display font-bold text-gray-900 leading-tight">
@@ -67,12 +66,12 @@ export default function Waitlist() {
             </p>
 
             <div className="mt-8 flex flex-wrap gap-3">
-              <Link
-                to="#waitlist"
+              <button
+                onClick={() => setIsOpen(true)}
                 className="btn-primary px-5 py-3 text-base transition-transform hover:scale-105"
               >
                 Join Waitlist →
-              </Link>
+              </button>
             </div>
           </section>
 
@@ -89,55 +88,63 @@ export default function Waitlist() {
               <img
                 src="images/sneak-peak.png"
                 className="mt-6 h-inherit rounded-lg bg-gradient-to-br from-purple-50 to-indigo-100 flex items-center justify-center text-purple-600 font-semibold"
-              >
-                {/* <img src="images/sneak-peak.png" /> */}
-              </img>
+                alt="Sneak peek"
+              />
             </div>
           </section>
         </div>
       </main>
 
-      {/* Waitlist Section */}
-      <section
-        id="waitlist"
-        className="py-20 bg-white border-t border-gray-100"
-      >
-        <div className="content-width text-center max-w-xl mx-auto animate-fadeInUp">
-          <h2 className="text-2xl font-bold text-gray-900 mb-3">
-            Join the Waitlist
-          </h2>
-          <p className="text-gray-600 mb-6">
-            Get early access when we launch. No spam, just the latest updates.
-          </p>
-          <form
-            onSubmit={handleSubmit}
-            className="flex flex-col sm:flex-row gap-3 justify-center"
-          >
-            <input
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter your email"
-              className="input-field flex-1 px-4 py-3 rounded-md border border-gray-300 shadow-sm focus:ring-rumi-purple focus:border-rumi-purple"
-            />
-            <button
-              type="submit"
-              role="submit"
-              className="btn-primary px-6 py-3 rounded-md transition-transform hover:scale-105"
-            >
-              Join Waitlist
-            </button>
-          </form>
-        </div>
-      </section>
-
       {/* Footer */}
       <footer className="bg-neutral-50 py-8 text-center text-sm text-gray-500 border-t border-gray-200">
-        {/* @ts-ignore */}
-        <Logo starColor="gray" textColor="gray" className="mx-auto mb-2" />
+        <Logo starColor="gray" textColor="gray" />
         <p>© {new Date().getFullYear()} RUMI. All rights reserved.</p>
       </footer>
+
+      {/* Popup Modal */}
+      {isOpen && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          {/* Overlay */}
+          <div
+            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+            onClick={() => setIsOpen(false)}
+          ></div>
+
+          {/* Modal box */}
+          <div className="relative bg-white rounded-xl shadow-lg w-full max-w-md p-6 animate-fadeInUp">
+            <h2 className="text-xl font-semibold text-gray-900">
+              Join the Waitlist
+            </h2>
+            <p className="text-sm text-gray-500 mt-1">
+              Be the first to know when RUMI launches.
+            </p>
+
+            <form onSubmit={handleSubmit} className="mt-4 flex flex-col gap-3">
+              <input
+                type="email"
+                placeholder="Enter your email"
+                className="input-field w-full"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+              <button
+                type="submit"
+                className="btn-primary w-full py-2 rounded-md"
+              >
+                Join Now
+              </button>
+            </form>
+
+            <button
+              className="absolute top-3 right-3 text-gray-400 hover:text-gray-600"
+              onClick={() => setIsOpen(false)}
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
