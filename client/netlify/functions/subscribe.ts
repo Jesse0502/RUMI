@@ -16,7 +16,7 @@ export async function handler(event, context) {
     const response = await fetch("https://api.flodesk.com/v1/subscribers", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${process.env.FLODESK_API_KEY}`, // keep secret
+        Authorization: `Basic ${process.env.FLODESK_API_KEY}`, // keep secret
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
