@@ -13,6 +13,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const { data, error, isLoading } = useGetUserInfoQuery();
 
   useEffect(() => {
+    if (!token) {
+      return;
+    }
     if (error) {
       localStorage.removeItem("token");
       navigate("/get-started"); // back to login/signup
@@ -22,9 +25,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     console.log("AuthProvider data:", data, error);
     if (data) {
-      //   navigate("/feed");
       //   console.log("data:", data);
       dispatch(logIn({ token: data.token!, userInfo: data.userInfo }));
+      navigate("/feed");
     }
   }, [data]);
 

@@ -27,6 +27,7 @@ import { ToasterProvider } from "./components/common/Toaster";
 import LoginPage from "./pages/GetStarted";
 import GetStartedPage from "./pages/GetStarted";
 import { AuthProvider } from "./contexts/AuthProvider";
+import Waitlist from "./pages/Waitlist";
 
 // const queryClient = new QueryClient();
 
@@ -68,6 +69,7 @@ export default function App() {
               <AuthProvider>
                 <Routes>
                   <Route path="/" element={<Home />} />
+                  <Route path="/waitlist" element={<Waitlist />} />
                   <Route path="/onboarding" element={<OnboardingNew />} />
                   <Route path="/profile" element={<Profile />} />
                   <Route path="/profile/:id" element={<ExtProfile />} />
